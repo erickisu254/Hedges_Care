@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
 import { MessageSquare, ArrowRight, Search, User, MapPin, ExternalLink, ChevronRight } from "lucide-react";
 
@@ -30,6 +30,7 @@ interface ServiceItem {
   num: string;
   title: string;
   desc: string;
+  link: string;
 }
 
 interface WorkflowStep {
@@ -43,6 +44,7 @@ interface Feature {
   emoji: string;
   title: string;
   desc: string;
+  link?: string;
 }
 
 interface Expert {
@@ -61,7 +63,7 @@ interface Testimonial {
 
 interface FooterColumn {
   title: string;
-  links: string[];
+  links: { label: string; to: string }[];
 }
 
 interface ExpertSectionProps {
@@ -84,6 +86,9 @@ const T: TokenMap = {
 /* ─── Navbar ─── */
 const Navbar: FC = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll);
@@ -98,6 +103,13 @@ const Navbar: FC = () => {
     e.currentTarget.style.color = "rgba(255,255,255,0.75)";
   };
 
+  const navLinks = [
+    { label: "ABOUT", to: "/about" },
+    { label: "SERVICES", to: "/plant-store" },
+    { label: "PROJECTS", to: "/drone-analysis" },
+    { label: "CONTACT", to: "/community-forum" },
+  ];
+
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
@@ -109,7 +121,7 @@ const Navbar: FC = () => {
       borderBottom: scrolled ? "1px solid rgba(255,255,255,0.08)" : "none",
     }}>
       {/* Logo */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <Link to="/" style={{ display: "flex", alignItems: "center", gap: 8, textDecoration: "none" }}>
         <div style={{
           width: 28, height: 28, borderRadius: "50%",
           background: `linear-gradient(135deg, ${T.accent}, ${T.gold})`,
@@ -121,14 +133,14 @@ const Navbar: FC = () => {
           fontFamily: "'Playfair Display', Georgia, serif",
           color: T.white, fontSize: 16, letterSpacing: "0.08em", fontWeight: 500,
         }}>hedges care</span>
-      </div>
+      </Link>
 
       {/* Nav Links */}
       <div style={{ display: "flex", gap: 40 }}>
-        {["ABOUT", "SERVICES", "PROJECTS", "CONTACT"].map(link => (
-          <a 
-            key={link} 
-            href="#" 
+        {navLinks.map(link => (
+          <Link 
+            key={link.label} 
+            to={link.to} 
             style={{
               color: "rgba(255,255,255,0.75)", textDecoration: "none",
               fontSize: 12, letterSpacing: "0.18em", fontFamily: "'DM Sans', sans-serif",
@@ -136,14 +148,24 @@ const Navbar: FC = () => {
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-          >{link}</a>
+          >{link.label}</Link>
         ))}
       </div>
 
       {/* Icons */}
       <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-        <User size={18} color="rgba(255,255,255,0.75)" style={{ cursor: "pointer" }} />
-        <Search size={18} color="rgba(255,255,255,0.75)" style={{ cursor: "pointer" }} />
+        <User 
+          size={18} 
+          color="rgba(255,255,255,0.75)" 
+          style={{ cursor: "pointer" }} 
+          onClick={() => navigate(user ? "/profile" : "/auth")}
+        />
+        <Search 
+          size={18} 
+          color="rgba(255,255,255,0.75)" 
+          style={{ cursor: "pointer" }} 
+          onClick={() => navigate("/plant-library")}
+        />
       </div>
     </nav>
   );
@@ -152,6 +174,7 @@ const Navbar: FC = () => {
 /* ─── Hero Section ─── */
 const HeroSection: FC = () => {
   const [slide, setSlide] = useState<number>(0);
+  const navigate = useNavigate();
   const slides: SlideItem[] = [
     { label: "Hachioji Garden", desc: "We design Hachioji Garden as part of our new Landscape Design Commission." },
     { label: "Nairobi Greens", desc: "Urban oasis design blending native flora with contemporary landscape art." },
@@ -225,6 +248,7 @@ const HeroSection: FC = () => {
 
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
           <button 
+            onClick={() => navigate("/scan")}
             style={{
               background: T.white, color: T.darkGreen, border: "none",
               padding: "14px 32px", borderRadius: 4, fontFamily: "'DM Sans', sans-serif",
@@ -235,13 +259,15 @@ const HeroSection: FC = () => {
             onMouseLeave={handleGetStartedLeave}
           >Get Started</button>
 
-          <button style={{
-            background: "transparent", color: T.white,
-            border: "1px solid rgba(255,255,255,0.4)",
-            padding: "14px 32px", borderRadius: 4, fontFamily: "'DM Sans', sans-serif",
-            fontSize: 13, fontWeight: 500, letterSpacing: "0.06em", cursor: "pointer",
-            transition: "border-color 0.2s",
-          }}>Explore Projects</button>
+          <button 
+            onClick={() => navigate("/drone-analysis")}
+            style={{
+              background: "transparent", color: T.white,
+              border: "1px solid rgba(255,255,255,0.4)",
+              padding: "14px 32px", borderRadius: 4, fontFamily: "'DM Sans', sans-serif",
+              fontSize: 13, fontWeight: 500, letterSpacing: "0.06em", cursor: "pointer",
+              transition: "border-color 0.2s",
+            }}>Explore Projects</button>
         </div>
       </div>
 
@@ -303,16 +329,23 @@ const HeroSection: FC = () => {
 
         {/* Services list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {["Landscape Design", "Plant Health", "Expert Chat"].map((svc, i) => (
-            <div key={svc} style={{
-              display: "flex", justifyContent: "space-between", alignItems: "center",
-              padding: "12px 0", borderBottom: "1px solid rgba(255,255,255,0.15)",
-              gap: 64, cursor: "pointer",
-            }}>
+          {[
+            { label: "Landscape Design", to: "/drone-analysis" },
+            { label: "Plant Health", to: "/scan" },
+            { label: "Expert Chat", to: "/specialist-chat" }
+          ].map((svc, i) => (
+            <div 
+              key={svc.label} 
+              onClick={() => navigate(svc.to)}
+              style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "12px 0", borderBottom: "1px solid rgba(255,255,255,0.15)",
+                gap: 64, cursor: "pointer",
+              }}>
               <span style={{
                 color: "rgba(255,255,255,0.7)", fontFamily: "'DM Sans', sans-serif",
                 fontSize: 13, letterSpacing: "0.06em",
-              }}>{svc}</span>
+              }}>{svc.label}</span>
               <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>0{i + 1}</span>
             </div>
           ))}
@@ -321,9 +354,6 @@ const HeroSection: FC = () => {
     </section>
   );
 };
-
-// [The rest of the components follow the same pattern - ValuesSection, FeaturesSection, WorkflowSection, ExpertSection, CtaSection, TestimonialsSection, FooterSection]
-// Due to length, continuing with the remaining sections...
 
 /* ─── Global Impact Counter ─── */
 const GlobalImpactSection: FC = () => {
@@ -390,6 +420,7 @@ const GlobalImpactSection: FC = () => {
 
 /* ─── Values / "We Are Different" Section ─── */
 const ValuesSection: FC = () => {
+  const navigate = useNavigate();
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>, enter: boolean) => {
     if (enter) {
       e.currentTarget.style.paddingLeft = "12px";
@@ -449,13 +480,14 @@ const ValuesSection: FC = () => {
 
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {([
-              { num: "01", title: "Landscape Design", desc: "AI-analysed layout recommendations, plant placement and seasonal planning." },
-              { num: "02", title: "Plant Health Monitoring", desc: "Early disease detection, nutrient tracking and environmental stress alerts." },
-              { num: "03", title: "Smart Irrigation", desc: "Water-optimised schedules powered by real-time soil and weather data." },
-              { num: "04", title: "Expert Consultation", desc: "Live sessions with certified landscape designers and horticulturists." },
-            ] as ServiceItem[]).map(({ num, title, desc }) => (
+              { num: "01", title: "Landscape Design", desc: "AI-analysed layout recommendations, plant placement and seasonal planning.", link: "/drone-analysis" },
+              { num: "02", title: "Plant Health Monitoring", desc: "Early disease detection, nutrient tracking and environmental stress alerts.", link: "/scan" },
+              { num: "03", title: "Smart Irrigation", desc: "Water-optimised schedules powered by real-time soil and weather data.", link: "/drone-analysis" },
+              { num: "04", title: "Expert Consultation", desc: "Live sessions with certified landscape designers and horticulturists.", link: "/specialist-chat" },
+            ] as ServiceItem[]).map(({ num, title, desc, link }) => (
               <div 
                 key={num} 
+                onClick={() => navigate(link)}
                 style={{
                   display: "flex", gap: 24, padding: "24px 0",
                   borderBottom: `1px solid rgba(26,42,26,0.1)`,
@@ -487,13 +519,14 @@ const ValuesSection: FC = () => {
 
 /* ─── Features Grid ─── */
 const FeaturesSection: FC = () => {
+  const navigate = useNavigate();
   const features: Feature[] = [
-    { emoji: "🏡", title: "Landscape Design Analysis", desc: "AI analyses your entire landscape — plant placement, health signals, and aesthetic improvements for optimal outdoor living." },
-    { emoji: "🌿", title: "Plant Health Monitoring", desc: "Comprehensive monitoring detecting early signs of disease, nutrient deficiencies, and environmental stressors before they escalate." },
-    { emoji: "🛡️", title: "Landscape Protection Plans", desc: "Customised pest management, disease prevention, and seasonal care tailored to your climate and plant varieties." },
-    { emoji: "⚡", title: "Smart Irrigation Management", desc: "AI-powered water scheduling that reduces waste while ensuring every plant receives precisely the hydration it needs." },
-    { emoji: "📊", title: "Performance Analytics", desc: "Track health, growth, and beauty metrics over time with seasonal recommendations and performance insights." },
-    { emoji: "🌍", title: "Expert Knowledge Base", desc: "Access an extensive database of plant selection guides, maintenance schedules, and sustainable practices from industry pros." },
+    { emoji: "🏡", title: "Landscape Design Analysis", desc: "AI analyses your entire landscape — plant placement, health signals, and aesthetic improvements for optimal outdoor living.", link: "/drone-analysis" },
+    { emoji: "🌿", title: "Plant Health Monitoring", desc: "Comprehensive monitoring detecting early signs of disease, nutrient deficiencies, and environmental stressors before they escalate.", link: "/scan" },
+    { emoji: "🛡️", title: "Landscape Protection Plans", desc: "Customised pest management, disease prevention, and seasonal care tailored to your climate and plant varieties.", link: "/plant-timeline" },
+    { emoji: "⚡", title: "Smart Irrigation Management", desc: "AI-powered water scheduling that reduces waste while ensuring every plant receives precisely the hydration it needs.", link: "/drone-analysis" },
+    { emoji: "📊", title: "Performance Analytics", desc: "Track health, growth, and beauty metrics over time with seasonal recommendations and performance insights.", link: "/profile" },
+    { emoji: "🌍", title: "Expert Knowledge Base", desc: "Access an extensive database of plant selection guides, maintenance schedules, and sustainable practices from industry pros.", link: "/plant-library" },
   ];
 
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>, enter: boolean) => {
@@ -536,9 +569,10 @@ const FeaturesSection: FC = () => {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
-          {features.map(({ emoji, title, desc }, i) => (
+          {features.map(({ emoji, title, desc, link }, i) => (
             <div 
               key={title} 
+              onClick={() => link && navigate(link)}
               style={{
                 padding: "40px 36px",
                 background: i % 2 === 0 ? "#FAFAF7" : T.white,
@@ -612,6 +646,7 @@ const WorkflowSection: FC = () => (
 
 /* ─── Expert Chat ─── */
 const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
+  const navigate = useNavigate();
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>, enter: boolean) => {
     e.currentTarget.style.background = enter ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)";
   };
@@ -671,6 +706,7 @@ const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
             ] as Expert[]).map(({ initials, name, role, online }) => (
               <div 
                 key={name} 
+                onClick={() => navigate(user ? "/specialist-chat" : "/auth")}
                 style={{
                   display: "flex", alignItems: "center", gap: 20,
                   padding: "20px 24px",
@@ -705,40 +741,47 @@ const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
 };
 
 /* ─── CTA ─── */
-const CtaSection: FC = () => (
-  <section style={{
-    background: `linear-gradient(135deg, ${T.forestGreen} 0%, ${T.darkGreen} 100%)`,
-    padding: "100px 48px", textAlign: "center",
-  }}>
-    <div style={{ maxWidth: 700, margin: "0 auto" }}>
-      <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.gold, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
-        [ PROFESSIONAL LANDSCAPING SOLUTIONS ]
+const CtaSection: FC = () => {
+  const navigate = useNavigate();
+  return (
+    <section style={{
+      background: `linear-gradient(135deg, ${T.forestGreen} 0%, ${T.darkGreen} 100%)`,
+      padding: "100px 48px", textAlign: "center",
+    }}>
+      <div style={{ maxWidth: 700, margin: "0 auto" }}>
+        <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.gold, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
+          [ PROFESSIONAL LANDSCAPING SOLUTIONS ]
+        </div>
+        <h2 style={{
+          fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4vw, 56px)",
+          fontWeight: 700, color: T.white, textTransform: "uppercase", margin: "0 0 24px",
+        }}>Transform Your<br /><em style={{ fontStyle: "italic", color: T.gold }}>Outdoor Spaces Today</em></h2>
+        <p style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.8, marginBottom: 48, fontFamily: "'DM Sans', sans-serif" }}>
+          Join thousands of homeowners and landscape professionals who trust our AI-powered platform.
+        </p>
+        <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
+          <button 
+            onClick={() => navigate("/scan")}
+            style={{
+              background: T.white, color: T.darkGreen, border: "none",
+              padding: "16px 40px", borderRadius: 4, fontWeight: 600, fontSize: 13,
+              letterSpacing: "0.06em", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
+            }}>Start Landscape Analysis ⚡</button>
+          <button 
+            onClick={() => navigate("/plant-store")}
+            style={{
+              background: "transparent", color: T.white, border: "1px solid rgba(255,255,255,0.35)",
+              padding: "16px 40px", borderRadius: 4, fontWeight: 500, fontSize: 13,
+              letterSpacing: "0.06em", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
+            }}>Landscaping Services</button>
+        </div>
+        <p style={{ marginTop: 24, color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.12em" }}>
+          🌟 Free landscape analysis &nbsp;•&nbsp; 🏡 Design consultation &nbsp;•&nbsp; 🌿 Plant health monitoring
+        </p>
       </div>
-      <h2 style={{
-        fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4vw, 56px)",
-        fontWeight: 700, color: T.white, textTransform: "uppercase", margin: "0 0 24px",
-      }}>Transform Your<br /><em style={{ fontStyle: "italic", color: T.gold }}>Outdoor Spaces Today</em></h2>
-      <p style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.8, marginBottom: 48, fontFamily: "'DM Sans', sans-serif" }}>
-        Join thousands of homeowners and landscape professionals who trust our AI-powered platform.
-      </p>
-      <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
-        <button style={{
-          background: T.white, color: T.darkGreen, border: "none",
-          padding: "16px 40px", borderRadius: 4, fontWeight: 600, fontSize: 13,
-          letterSpacing: "0.06em", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
-        }}>Start Landscape Analysis ⚡</button>
-        <button style={{
-          background: "transparent", color: T.white, border: "1px solid rgba(255,255,255,0.35)",
-          padding: "16px 40px", borderRadius: 4, fontWeight: 500, fontSize: 13,
-          letterSpacing: "0.06em", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
-        }}>Landscaping Services</button>
-      </div>
-      <p style={{ marginTop: 24, color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.12em" }}>
-        🌟 Free landscape analysis &nbsp;•&nbsp; 🏡 Design consultation &nbsp;•&nbsp; 🌿 Plant health monitoring
-      </p>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 /* ─── Testimonials ─── */
 const TestimonialsSection: FC = () => (
@@ -796,6 +839,29 @@ const FooterSection: FC = () => {
     e.currentTarget.style.color = enter ? T.white : "rgba(255,255,255,0.5)";
   };
 
+  const footerCols: FooterColumn[] = [
+    { title: "Features", links: [
+      { label: "AI Plant Detection", to: "/scan" },
+      { label: "Plant Encyclopedia", to: "/plant-library" },
+      { label: "Tutorial Videos", to: "/video-library" },
+      { label: "Expert Chat", to: "/specialist-chat" },
+      { label: "Community Forum", to: "/community-forum" }
+    ]},
+    { title: "Company", links: [
+      { label: "About Us", to: "/about" },
+      { label: "Pricing", to: "/subscription" },
+      { label: "Drone Analysis", to: "/drone-analysis" },
+      { label: "Partnerships", to: "/partnerships" },
+      { label: "Contact Us", to: "/community-forum" }
+    ]},
+    { title: "Legal", links: [
+      { label: "Terms of Service", to: "#" },
+      { label: "Privacy Policy", to: "#" },
+      { label: "Cookie Policy", to: "#" },
+      { label: "Data Protection", to: "#" }
+    ]},
+  ];
+
   return (
     <footer style={{ background: T.darkGreen, padding: "80px 48px 40px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -823,11 +889,7 @@ const FooterSection: FC = () => {
             </div>
           </div>
 
-          {([
-            { title: "Features", links: ["AI Plant Detection", "Plant Encyclopedia", "Tutorial Videos", "Expert Chat", "Community Forum"] },
-            { title: "Company", links: ["About Us", "Pricing", "Careers", "Blog", "Contact Us"] },
-            { title: "Legal", links: ["Terms of Service", "Privacy Policy", "Cookie Policy", "Data Protection"] },
-          ] as FooterColumn[]).map(({ title, links }) => (
+          {footerCols.map(({ title, links }) => (
             <div key={title}>
               <div style={{
                 fontFamily: "'DM Sans', sans-serif", fontWeight: 600, color: T.white,
@@ -835,16 +897,16 @@ const FooterSection: FC = () => {
               }}>{title.toUpperCase()}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                 {links.map(l => (
-                  <a 
-                    key={l} 
-                    href="#" 
+                  <Link 
+                    key={l.label} 
+                    to={l.to} 
                     style={{
                       color: "rgba(255,255,255,0.5)", textDecoration: "none",
                       fontSize: 13, fontFamily: "'DM Sans', sans-serif", transition: "color 0.2s",
                     }}
                     onMouseEnter={(e) => handleLinkHover(e, true)}
                     onMouseLeave={(e) => handleLinkHover(e, false)}
-                  >{l}</a>
+                  >{l.label}</Link>
                 ))}
               </div>
             </div>
@@ -882,7 +944,6 @@ const Landing: FC = () => {
     link.rel = "stylesheet";
     link.href = "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@400;500;600&display=swap";
     document.head.appendChild(link);
-    // ✅ FIXED: Return undefined (void), not the link element
   }, []);
 
   return (

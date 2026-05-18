@@ -332,14 +332,33 @@ export const mockDataService = {
 // Function to test if Supabase is available
 export const testSupabaseConnection = async (): Promise<boolean> => {
   try {
-    // Try a simple query to test connection
-    const response = await fetch('https://bswtctukvtnigbqmccpg.supabase.co/rest/v1/', {
-      method: 'HEAD',
-      headers: {
-        'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzd3RjdHVrdnRuaWdicW1jY3BnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwNTAwMjYsImV4cCI6MjA1OTYyNjAyNn0.jbE1gxEKNHmOKN1JI9xUlHMcwaGjgGcSRfsAE7TKDd0',
-      },
-    });
-    return response.ok;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    
+    if (!supabaseUrl || !supabaseKey) {
+      console.log('Supabase credentials missing, falling back to mock data');
+      return false;
+    }
+
+    // Try a simple query to test connection with a timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
+
+    try {
+      const response = await fetch(`${supabaseUrl}/rest/v1/`, {
+        method: 'HEAD',
+        headers: {
+          'apikey': supabaseKey,
+        },
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+      return response.ok;
+    } catch (e) {
+      clearTimeout(timeoutId);
+      console.log('Supabase connection test failed or timed out:', e);
+      return false;
+    }
   } catch (error) {
     console.log('Supabase connection test failed:', error);
     return false;
