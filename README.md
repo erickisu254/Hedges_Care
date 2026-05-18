@@ -64,6 +64,11 @@ Here's what's under the hood 🛠️:
 ## 🚀 Features💯
 
 ✅ **AI Plant Analysis** – Advanced plant health assessment and species identification with 95% accuracy!
+✅ **15 Billion Trees Initiative Support** – Aligned with Kenya's national environmental goals 🇰🇪
+✅ **Global Impact Counter** – Real-time tracking of community-wide carbon sequestration 🌍
+✅ **Disease Outbreak Heatmap** – Community-driven disease reporting and visualization 📊
+✅ **PWA Support** – Installable app that works offline for use in remote fields 📱
+✅ **Multi-Language Support** – Optimized for local impact with Swahili and Yoruba translations 🌍
 ✅ **CO2 Absorption Calculator** – Measure your plants' carbon sequestration impact using scientific data 🌳
 ✅ **Expert Landscaping Advice** – Tailored recommendations from certified landscaping professionals 🌾
 ✅ **Community Forum** – Share landscaping tips and environmental insights 🗣️

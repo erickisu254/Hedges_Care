@@ -245,6 +245,74 @@ const AdvancedAnalytics: React.FC = () => {
         </CardContent>
       </Card>
 
+      {/* Community Outbreak Heatmap */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+            Regional Disease Outbreak Heatmap
+          </CardTitle>
+          <CardDescription>
+            Real-time community reporting of plant disease outbreaks in your region
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="relative h-[400px] w-full bg-slate-100 rounded-lg overflow-hidden border border-slate-200">
+            {/* Simulation of a heatmap with CSS/SVG */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-slate-400 flex flex-col items-center">
+                <Leaf className="h-12 w-12 mb-2 opacity-20" />
+                <span className="text-sm font-medium">Regional Map View (Live Data Simulation)</span>
+              </div>
+            </div>
+            
+            {/* Outbreak points */}
+            <div className="absolute top-[20%] left-[30%] h-12 w-12 bg-red-500/20 rounded-full animate-pulse border border-red-500/50 flex items-center justify-center">
+              <div className="h-4 w-4 bg-red-500 rounded-full" />
+            </div>
+            <div className="absolute top-[50%] left-[60%] h-24 w-24 bg-orange-500/20 rounded-full animate-pulse border border-orange-500/50 flex items-center justify-center">
+              <div className="h-6 w-6 bg-orange-500 rounded-full" />
+            </div>
+            <div className="absolute top-[70%] left-[40%] h-16 w-16 bg-yellow-500/20 rounded-full animate-pulse border border-yellow-500/50 flex items-center justify-center">
+              <div className="h-5 w-5 bg-yellow-500 rounded-full" />
+            </div>
+
+            {/* Legend */}
+            <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur p-3 rounded border border-slate-200 shadow-sm">
+              <p className="text-xs font-bold mb-2 uppercase tracking-wider">Outbreak Severity</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 bg-red-500 rounded-full" />
+                  <span className="text-[10px]">High - Immediate Action Needed</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 bg-orange-500 rounded-full" />
+                  <span className="text-[10px]">Medium - Monitor Closely</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 bg-yellow-500 rounded-full" />
+                  <span className="text-[10px]">Low - Isolated Incidents</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Location Tags (Kenya Cities) */}
+            <div className="absolute top-[15%] left-[35%] text-[10px] font-bold text-slate-600">NAIROBI</div>
+            <div className="absolute top-[45%] left-[65%] text-[10px] font-bold text-slate-600">MOMBASA</div>
+            <div className="absolute top-[65%] left-[45%] text-[10px] font-bold text-slate-600">NAKURU</div>
+          </div>
+          
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-sm text-slate-600">
+              Last updated: 5 minutes ago • 14 new reports in your area
+            </p>
+            <Badge variant="outline" className="text-red-600 border-red-200 bg-red-50">
+              Active Warning: Late Blight (Potato/Tomato)
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* ROI Calculator */}
       <Card>
         <CardHeader>

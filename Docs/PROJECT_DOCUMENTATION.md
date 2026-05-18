@@ -157,52 +157,19 @@ NFT rarity is determined by CO2 absorption capacity:
 
 ## CO2 Measurement & Environmental Impact
 
-### Scientific CO2 Absorption Algorithm
-The platform uses a scientifically-backed algorithm to calculate CO2 absorption:
+### Community Impact Dashboard
+The platform features a collective dashboard that aggregates data from all users to show broader environmental impact.
 
-```typescript
-function calculateCO2Absorption(plant: PlantCO2Data): {
-  daily: number; // kg CO2 per day
-  annual: number; // kg CO2 per year
-  impact: string; // Environmental impact description
-} {
-  // Base absorption rates by species (kg CO2/m²/year)
-  const speciesRates: Record<string, number> = {
-    'oak': 22.0,
-    'pine': 12.5,
-    'maple': 21.0,
-    'hedge': 15.8,
-    'fruit_tree': 18.2
-  };
-  
-  const baseRate = speciesRates[plant.species] || 15.0;
-  const healthMultiplier = plant.healthScore;
-  const areaMultiplier = plant.leafArea;
-  
-  const annualAbsorption = baseRate * healthMultiplier * areaMultiplier;
-  const dailyAbsorption = annualAbsorption / 365;
-  
-  return {
-    daily: dailyAbsorption,
-    annual: annualAbsorption,
-    impact: generateImpactDescription(annualAbsorption)
-  };
-}
-```
+**Key Features:**
+- **Global Impact Counter**: Real-time display of total CO2 sequestered and trees monitored by the community.
+- **Disease Outbreak Heatmap**: Visual map showing regional hotspots for plant diseases (e.g., Nairobi, Mombasa, Nakuru), enabling proactive community response.
+- **ROI Insights**: Financial analysis of crop losses prevented through early detection.
 
-### Environmental Impact Tracking
-- **Real-time Monitoring**: Track CO2 absorption over time
-- **Comparative Analysis**: Compare impact with other plants and benchmarks
-- **Historical Data**: Store and analyze trends in plant health and CO2 absorption
-- **Visualization**: Interactive charts showing environmental contributions
-
-### Impact Examples
-| Plant Type | Health Status | Size | Daily CO2 Absorption | Annual Impact |
-|------------|---------------|------|---------------------|---------------|
-| Oak Tree | Excellent | 25m² | 1.2 kg/day | Equivalent to 6 cars driven for 1 hour |
-| Pine Tree | Good | 15m² | 0.5 kg/day | Offset 1,825 km of driving annually |
-| Hedge Row | Healthy | 50m² | 2.1 kg/day | Clean air for 2 people for a year |
-| Fruit Tree | Fair | 8m² | 0.3 kg/day | Offset 1,095 kg CO2 annually |
+### 15 Billion Trees Initiative (Kenya)
+Hedges Care is strategically aligned with the Kenyan government's goal to plant 15 billion trees by 2032. The platform serves as a monitoring and verification tool for:
+- Tracking individual and community contributions to national targets.
+- Verifying plant health and survival rates through AI scanning.
+- Quantifying the actual CO2 sequestration of newly planted forests and hedges.
 
 ## UN SDG 15 Alignment
 

@@ -51,11 +51,35 @@
 ### Technology Stack
 - **Framework**: React 18.3.1 with TypeScript
 - **Build Tool**: Vite 5.4.1
+- **PWA Capabilities**: `vite-plugin-pwa` for offline support and service workers
+- **Localization**: Custom `LanguageProvider` with support for English, Swahili, and Yoruba
 - **Styling**: Tailwind CSS 3.4.11 with Shadcn/ui components
 - **State Management**: React Query 5.56.2 for server state
 - **Routing**: React Router DOM 6.26.2
-- **Forms**: React Hook Form 7.53.0 with Zod validation
-- **UI Components**: Custom components using Radix UI primitives
+
+### PWA Implementation
+The platform is built as a Progressive Web App to ensure usability in low-connectivity agricultural areas.
+- **Service Worker**: Automatic updates and background sync
+- **Manifest**: Custom theme colors and high-resolution icons (192x192, 512x512)
+- **Offline Assets**: Caching of critical UI components and the plant library
+- **Add to Home Screen**: Standardized installation flow for iOS and Android
+
+### Localization Strategy
+```typescript
+// Swahili Support Example in LanguageContext
+{
+  code: 'sw',
+  name: 'Swahili',
+  nativeName: 'Kiswahili',
+  flag: '🇰🇪',
+  translations: {
+    scan: {
+      title: 'AI Daktari wa Mazao',
+      description: 'Mfumo wetu wa kisasa wa AI unachambua picha za mimea...'
+    }
+  }
+}
+```
 
 ### Key Frontend Components
 

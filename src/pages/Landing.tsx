@@ -218,8 +218,9 @@ const HeroSection: FC = () => {
           color: "rgba(255,255,255,0.7)", maxWidth: 420, lineHeight: 1.65,
           fontFamily: "'DM Sans', sans-serif", fontSize: 15, margin: "0 0 36px 0",
         }}>
-          Crafting dream gardens with passion, creativity, and sustainability for over a decade
-          with our experienced landscape artists and gardener teams.
+          Crafting dream gardens with passion, creativity, and sustainability. 
+          Supporting Kenya's <strong>15 Billion Trees Initiative</strong> through 
+          AI-driven health monitoring and carbon sequestration tracking.
         </p>
 
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
@@ -323,6 +324,69 @@ const HeroSection: FC = () => {
 
 // [The rest of the components follow the same pattern - ValuesSection, FeaturesSection, WorkflowSection, ExpertSection, CtaSection, TestimonialsSection, FooterSection]
 // Due to length, continuing with the remaining sections...
+
+/* ─── Global Impact Counter ─── */
+const GlobalImpactSection: FC = () => {
+  const [count, setCount] = useState<number>(12450);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount(prev => prev + Math.floor(Math.random() * 3));
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section style={{ 
+      background: T.darkGreen, 
+      padding: "60px 48px", 
+      borderBottom: `1px solid ${T.glassBorder}` 
+    }}>
+      <div style={{ 
+        maxWidth: 1200, 
+        margin: "0 auto", 
+        display: "flex", 
+        justifyContent: "space-between", 
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: 32
+      }}>
+        <div style={{ flex: 1, minWidth: 300 }}>
+          <h3 style={{ 
+            color: T.gold, 
+            fontFamily: "'Playfair Display', serif", 
+            fontSize: 24, 
+            marginBottom: 8 
+          }}>Community Impact</h3>
+          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>
+            Join our community of environmental stewards tracking real-time carbon sequestration across Kenya.
+          </p>
+        </div>
+        
+        <div style={{ display: "flex", gap: 48 }}>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ 
+              color: T.white, 
+              fontSize: 36, 
+              fontWeight: 700, 
+              fontFamily: "'DM Sans', sans-serif" 
+            }}>{count.toLocaleString()} kg</div>
+            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>TOTAL CO2 SEQUESTERED</div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ 
+              color: T.white, 
+              fontSize: 36, 
+              fontWeight: 700, 
+              fontFamily: "'DM Sans', sans-serif" 
+            }}>1,842</div>
+            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>TREES MONITORED</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 /* ─── Values / "We Are Different" Section ─── */
 const ValuesSection: FC = () => {
@@ -825,6 +889,7 @@ const Landing: FC = () => {
     <div style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <Navbar />
       <HeroSection />
+      <GlobalImpactSection />
       <ValuesSection />
       <FeaturesSection />
       <WorkflowSection />

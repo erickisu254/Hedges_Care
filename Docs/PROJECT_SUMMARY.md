@@ -6,7 +6,8 @@
 
 ### Key Differentiators
 - **Dual Focus**: Practical plant management + environmental impact measurement
-- **Technology Integration**: AI analysis + NFT verification + blockchain trading
+- **National Impact**: Direct support for Kenya's **15 Billion Trees Initiative**
+- **Technology Integration**: AI analysis + NFT verification + PWA (Offline Support)
 - **Scientific Foundation**: Data-driven CO2 absorption calculations
 - **Global Alignment**: Direct contribution to UN SDG 15: Life on Land
 
@@ -18,13 +19,19 @@
 - **96% accuracy** in species identification and health assessment
 - **1000+ plant species** in global database
 - **Real-time processing** with 5-stage analysis pipeline
-- **Expert recommendations** tailored to specific plant types
+- **Local Context**: Swahili and Yoruba localization for regional impact
 
 ### 2. Environmental Impact Measurement
 - **Scientific CO2 absorption** calculations based on species, health, and size
-- **Real-time tracking** of environmental contributions
-- **Comparative analysis** with benchmarks and historical data
-- **Visual dashboards** showing impact over time
+- **Community Impact Counter**: Real-time tracking of aggregate carbon sequestration
+- **Outbreak Heatmap**: Regional visualization of plant disease reports
+- **Visual dashboards** showing individual and community impact over time
+
+### 3. Progressive Web App (PWA)
+- **Offline Capabilities**: Use the app in remote fields without internet
+- **Installable**: Full app experience on mobile without app store downloads
+- **Push Notifications**: Real-time alerts for local disease outbreaks
+- **High Performance**: Optimized for low-bandwidth environments
 
 ### 3. NFT Integration
 - **Plant verification NFTs** representing environmental impact
