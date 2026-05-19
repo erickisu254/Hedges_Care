@@ -2,26 +2,36 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageSquare } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const TestimonialsSection = () => {
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+
   const testimonials = [
     {
-      initial: "J",
+      initial: "A",
       name: "Ann Njeru. 👨‍🌾",
-      role: "Small-scale Farmer",
-      text: "Crop Doctor has transformed how I manage my farm. Identifying diseases early has saved me thousands in potential crop losses. Highly recommend! 🌱"
+      role: isSwahili ? "Mkulima Mdogo" : "Small-scale Farmer",
+      text: isSwahili 
+        ? "Hedges Care imebadilisha jinsi ninavyosimamia shamba langu. Kutambua magonjwa mapema kumeniokoa maelfu ya hasara za mazao. Naipendekeza sana! 🌱"
+        : "Hedges Care has transformed how I manage my farm. Identifying diseases early has saved me thousands in potential crop losses. Highly recommend! 🌱"
     },
     {
       initial: "S",
       name: "Stephen Ndwiga. 👩‍🌾",
-      role: "Urban Gardener",
-      text: "As a hobby gardener, I was always struggling with plant diseases. Crop Doctor makes it so easy to identify and treat problems! My garden has never looked better. 🌿"
+      role: isSwahili ? "Mkulima wa Mijini" : "Urban Gardener",
+      text: isSwahili
+        ? "Kama mpenzi wa bustani, nilikuwa nikihangaika na magonjwa ya mimea. Hedges Care inafanya iwe rahisi kutambua na kutibu matatizo! Bustani yangu haijawahi kuonekana vizuri hivi. 🌿"
+        : "As a hobby gardener, I was always struggling with plant diseases. Hedges Care makes it so easy to identify and treat problems! My garden has never looked better. 🌿"
     },
     {
-      initial: "R",
+      initial: "W",
       name: "Wilson Omondi. 🧑‍🌾",
-      role: "Commercial Grower",
-      text: "This app has become an essential tool for our farm operations. The instant diagnosis helps us take action quickly and protect our yields. Worth every penny! 💯"
+      role: isSwahili ? "Mzalishaji wa Biashara" : "Commercial Grower",
+      text: isSwahili
+        ? "Programu hii imekuwa chombo muhimu kwa shughuli zetu za shamba. Utambuzi wa papo hapo unatusaidia kuchukua hatua haraka na kulinda mavuno yetu. Inastahili kila senti! 💯"
+        : "This app has become an essential tool for our farm operations. The instant diagnosis helps us take action quickly and protect our yields. Worth every penny! 💯"
     }
   ];
 
@@ -29,10 +39,16 @@ const TestimonialsSection = () => {
     <div className="py-16 bg-green-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-medium text-sm mb-2">💬 TESTIMONIALS</span>
-          <h2 className="text-3xl font-bold text-green-800 mb-4">What Our Users Say 🌟</h2>
+          <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-medium text-sm mb-2">
+            {isSwahili ? "💬 USHUHUDA" : "💬 TESTIMONIALS"}
+          </span>
+          <h2 className="text-3xl font-bold text-green-800 mb-4">
+            {isSwahili ? "Watumiaji Wetu Wanasema Nini 🌟" : "What Our Users Say 🌟"}
+          </h2>
           <p className="text-lg text-green-700 max-w-3xl mx-auto">
-            Thousands of farmers and gardeners trust Crop Doctor to protect their plants.
+            {isSwahili 
+              ? "Maelfu ya wakulima na wapenzi wa bustani wanaamini Hedges Care kulinda mimea yao."
+              : "Thousands of farmers and gardeners trust Hedges Care to protect their plants."}
           </p>
         </div>
 
@@ -60,7 +76,7 @@ interface TestimonialCardProps {
 }
 
 const TestimonialCard = ({ initial, name, role, text }: TestimonialCardProps) => (
-  <Card className="border-green-100 hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-green-300">
+  <Card className="border-green-100 hover:shadow-xl transition-all duration-300 hover:scale-105 hover:border-green-300 bg-white/80 backdrop-blur-sm">
     <CardContent className="pt-6">
       <div className="flex items-center mb-4">
         <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center mr-4">

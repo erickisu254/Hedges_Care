@@ -7,6 +7,7 @@ import { WeatherData } from "@/types/forum";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CloudSun, CloudRain, Wind, Droplets } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useRegion } from "@/contexts/RegionContext";
 
 const WeatherWidget: React.FC = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -14,6 +15,7 @@ const WeatherWidget: React.FC = () => {
   const [location, setLocation] = useState("Loading...");
   const [error, setError] = useState("");
   const { toast } = useToast();
+  const { currentRegion } = useRegion();
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -21,43 +23,29 @@ const WeatherWidget: React.FC = () => {
         setLoading(true);
         setError("");
         
-        console.log('Fetching weather data...');
+        console.log(`Fetching weather data for ${currentRegion.name}...`);
         
-        // Get user's location (will fallback to Nairobi)
-        const { lat, lon } = await getUserLocation();
-        console.log('Location:', lat, lon);
-        
-        // Get weather data based on location
-        const data = await getWeatherData(lat, lon);
+        // Get weather data based on current region context
+        const data = await getWeatherData(currentRegion.coordinates.lat, currentRegion.coordinates.lng);
         console.log('Weather data:', data);
         
-        setWeather(data);
-        setLocation(data.location);
+        // Use our region name instead of the one from the service for consistency
+        setWeather({
+          ...data,
+          location: currentRegion.name
+        });
+        setLocation(currentRegion.name);
         
-        if (toast) {
-          toast({
-            title: "Weather Data",
-            description: `Weather data loaded for ${data.location}`,
-          });
-        }
       } catch (err) {
         console.error("Error in weather component:", err);
         setError("Unable to load weather data");
-        
-        if (toast) {
-          toast({
-            title: "Weather Notice",
-            description: "Using offline weather data",
-            variant: "default"
-          });
-        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchWeather();
-  }, [toast]);
+  }, [currentRegion]);
 
   const formatDate = (dateString: string) => {
     try {

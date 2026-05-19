@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { History, RotateCcw, BookOpen, MessageCircle, Leaf } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DiagnosisActionsProps {
   diagnosis: string | null;
@@ -16,6 +17,8 @@ const DiagnosisActions: React.FC<DiagnosisActionsProps> = ({
   handleReset
 }) => {
   const navigate = useNavigate();
+  const { t, currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
 
   const handleTrackTimeline = () => {
     navigate("/plant-timeline", {
@@ -39,38 +42,38 @@ const DiagnosisActions: React.FC<DiagnosisActionsProps> = ({
       <Button
         variant="outline"
         onClick={handleReset}
-        className="flex-1 flex items-center justify-center gap-2"
+        className="flex-1 flex items-center justify-center gap-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50"
       >
         <RotateCcw className="h-4 w-4" />
-        New Analysis
+        {t('scan.newScan')}
       </Button>
       
       {diagnosis && (
         <>
           <Button
             onClick={handleTrackTimeline}
-            className="bg-blue-600 hover:bg-blue-700 text-white flex-1 flex items-center justify-center gap-2"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white flex-1 flex items-center justify-center gap-2"
           >
             <Leaf className="h-4 w-4" />
-            Track Growth
+            {isSwahili ? "Fuatilia Ukuaji" : "Track Growth"}
           </Button>
           
           <Button
             variant="outline"
             onClick={handleViewPlantLibrary}
-            className="flex-1 flex items-center justify-center gap-2"
+            className="flex-1 flex items-center justify-center gap-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50"
           >
             <BookOpen className="h-4 w-4" />
-            Plant Library
+            {isSwahili ? "Maktaba ya Mimea" : "Plant Library"}
           </Button>
           
           <Button
             variant="outline"
             onClick={handleExpertConsultation}
-            className="flex-1 flex items-center justify-center gap-2"
+            className="flex-1 flex items-center justify-center gap-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50"
           >
             <MessageCircle className="h-4 w-4" />
-            Expert Help
+            {isSwahili ? "Msaada wa Kitaalamu" : "Expert Help"}
           </Button>
         </>
       )}

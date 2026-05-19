@@ -23,6 +23,7 @@ import { AuthProvider } from "./components/AuthProvider";
 import { RequireAuth } from "./components/RequireAuth";
 import { NotificationProvider } from "./components/NotificationProvider";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { RegionProvider } from "./contexts/RegionContext";
 import { TimelineProvider } from "./hooks/use-timeline";
 import DroneAnalysis from "./pages/analysis/DroneAnalysis";
 import PestPrediction from "./pages/analysis/Prediction";
@@ -53,7 +54,8 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <LanguageProvider>
-          <NotificationProvider>
+          <RegionProvider>
+            <NotificationProvider>
             <TimelineProvider>
               <TooltipProvider>
                 <Toaster />
@@ -161,6 +163,7 @@ const App = () => {
               </TooltipProvider>
             </TimelineProvider>
           </NotificationProvider>
+          </RegionProvider>
         </LanguageProvider>
       </AuthProvider>
     </QueryClientProvider>

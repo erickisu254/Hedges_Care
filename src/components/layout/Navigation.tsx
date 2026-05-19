@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
+import { useLanguage } from "@/contexts/LanguageContext";
 import UserMenu from "./UserMenu";
 import NavItems from "./NavItems";
 import LanguageSelector from '../language/LanguageSelector';
@@ -17,6 +18,7 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
+  const { t, currentLanguage } = useLanguage();
   
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -40,7 +42,9 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
                 </div>
                 <div>
                   <span className="font-bold gradient-text text-lg hidden md:block">Hedges Care</span>
-                  <span className="text-xs text-emerald-600 hidden md:block block">NFT-Powered Plant Intelligence</span>
+                  <span className="text-xs text-emerald-600 hidden md:block block">
+                    {currentLanguage.code === 'sw' ? 'Akili ya Mimea Inayotumia NFT' : 'NFT-Powered Plant Intelligence'}
+                  </span>
                 </div>
               </Link>
               
@@ -70,7 +74,7 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
                   <Button variant="outline" size="sm" className="premium-border-gold text-amber-700 hover:bg-amber-50 transition-all duration-300">
                     <span className="flex items-center space-x-1">
                       <span>⭐</span>
-                      <span>Upgrade</span>
+                      <span>{currentLanguage.code === 'sw' ? 'Boresha' : 'Upgrade'}</span>
                     </span>
                   </Button>
                 </Link>
@@ -81,13 +85,13 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
                 <Button asChild variant="ghost" size="sm" className="hover:text-emerald-600 hover:bg-emerald-50 transition-all duration-300">
                   <Link to="/auth?mode=signin" className="flex items-center space-x-2">
                     <span>🔐</span>
-                    <span>Log in</span>
+                    <span>{currentLanguage.code === 'sw' ? 'Ingia' : 'Log in'}</span>
                   </Link>
                 </Button>
                 <Button asChild size="sm" className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
                   <Link to="/auth?mode=signup" className="flex items-center space-x-2">
                     <span>🚀</span>
-                    <span>Sign up</span>
+                    <span>{currentLanguage.code === 'sw' ? 'Jisajili' : 'Sign up'}</span>
                   </Link>
                 </Button>
               </>
@@ -142,7 +146,7 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
                   <Button variant="outline" size="sm" className="premium-border-gold text-amber-700 hover:bg-amber-50 transition-all duration-300">
                     <span className="flex items-center space-x-1">
                       <span>⭐</span>
-                      <span>Upgrade</span>
+                      <span>{currentLanguage.code === 'sw' ? 'Boresha' : 'Upgrade'}</span>
                     </span>
                   </Button>
                 </Link>
@@ -152,13 +156,13 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
                 <Button asChild variant="outline" className="flex-1 premium-border text-emerald-700 hover:bg-emerald-50 transition-all duration-300">
                   <Link to="/auth?mode=signin" className="flex items-center justify-center space-x-2">
                     <span>🔐</span>
-                    <span>Log in</span>
+                    <span>{currentLanguage.code === 'sw' ? 'Ingia' : 'Log in'}</span>
                   </Link>
                 </Button>
                 <Button asChild className="flex-1 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
                   <Link to="/auth?mode=signup" className="flex items-center justify-center space-x-2">
                     <span>🚀</span>
-                    <span>Sign up</span>
+                    <span>{currentLanguage.code === 'sw' ? 'Jisajili' : 'Sign up'}</span>
                   </Link>
                 </Button>
               </div>
@@ -172,7 +176,7 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
               >
                 <span className="flex items-center space-x-2">
                   <span>👤</span>
-                  <span>Your Profile</span>
+                  <span>{currentLanguage.code === 'sw' ? 'Wasifu Wako' : 'Your Profile'}</span>
                 </span>
               </Link>
               <Link
@@ -181,7 +185,7 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
               >
                 <span className="flex items-center space-x-2">
                   <span>📊</span>
-                  <span>Scan History</span>
+                  <span>{currentLanguage.code === 'sw' ? 'Historia ya Scan' : 'Scan History'}</span>
                 </span>
               </Link>
               <Button
@@ -191,7 +195,7 @@ const Navigation = ({ activeTab = "", setActiveTab = () => {} }: NavigationProps
               >
                 <span className="flex items-center space-x-2">
                   <span>🚪</span>
-                  <span>Sign out</span>
+                  <span>{currentLanguage.code === 'sw' ? 'Ondoka' : 'Sign out'}</span>
                 </span>
               </Button>
             </div>

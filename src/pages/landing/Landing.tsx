@@ -1,7 +1,11 @@
 import React, { useState, useEffect, FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthProvider";
-import { MessageSquare, ArrowRight, Search, User, MapPin, ExternalLink, ChevronRight } from "lucide-react";
+import { MessageSquare, ArrowRight, Search, User, MapPin, ExternalLink, ChevronRight, Languages } from "lucide-react";
+import { CommunityImpact } from "@/components/analytics/CommunityImpact";
+import { useRegion } from "@/contexts/RegionContext";
+import { RegionSelector } from "@/components/layout/RegionSelector";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 /* ─── Types ─── */
 interface TokenMap {
@@ -88,6 +92,8 @@ const Navbar: FC = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -104,10 +110,10 @@ const Navbar: FC = () => {
   };
 
   const navLinks = [
-    { label: "ABOUT", to: "/about" },
-    { label: "SERVICES", to: "/plant-store" },
-    { label: "PROJECTS", to: "/drone-analysis" },
-    { label: "CONTACT", to: "/community-forum" },
+    { label: isSwahili ? "KUHUSU" : "ABOUT", to: "/about" },
+    { label: isSwahili ? "HUDUMA" : "SERVICES", to: "/plant-store" },
+    { label: isSwahili ? "MIRADI" : "PROJECTS", to: "/drone-analysis" },
+    { label: isSwahili ? "WASILIANA" : "CONTACT", to: "/community-forum" },
   ];
 
   return (
@@ -175,10 +181,26 @@ const Navbar: FC = () => {
 const HeroSection: FC = () => {
   const [slide, setSlide] = useState<number>(0);
   const navigate = useNavigate();
+  const { t, currentLanguage, setLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+
+  const toggleLanguage = () => {
+    setLanguage(isSwahili ? 'en' : 'sw');
+  };
+
   const slides: SlideItem[] = [
-    { label: "Hachioji Garden", desc: "We design Hachioji Garden as part of our new Landscape Design Commission." },
-    { label: "Nairobi Greens", desc: "Urban oasis design blending native flora with contemporary landscape art." },
-    { label: "Highland Estate", desc: "Full-service estate landscaping across 40 acres of premium highland terrain." },
+    { 
+      label: isSwahili ? "Bustani ya Hachioji" : "Hachioji Garden", 
+      desc: isSwahili ? "Tunatengeneza Bustani ya Hachioji kama sehemu ya Tume yetu mpya ya Ubunifu wa Mazingira." : "We design Hachioji Garden as part of our new Landscape Design Commission." 
+    },
+    { 
+      label: isSwahili ? "Kijani cha Nairobi" : "Nairobi Greens", 
+      desc: isSwahili ? "Ubunifu wa oasis wa mijini unaochanganya mimea ya asili na sanaa ya kisasa ya mazingira." : "Urban oasis design blending native flora with contemporary landscape art." 
+    },
+    { 
+      label: isSwahili ? "Highland Estate" : "Highland Estate", 
+      desc: isSwahili ? "Huduma kamili ya mazingira ya shamba katika hekta 40 za ardhi ya nyanda za juu." : "Full-service estate landscaping across 40 acres of premium highland terrain." 
+    },
   ];
 
   // Button hover handlers
@@ -205,6 +227,22 @@ const HeroSection: FC = () => {
         `,
       }} />
 
+      {/* Language Toggle */}
+      <div style={{ position: "absolute", top: 100, left: 48, zIndex: 10 }}>
+        <button 
+          onClick={toggleLanguage}
+          style={{
+            background: "rgba(255,255,255,0.15)", color: T.white, border: "1px solid rgba(255,255,255,0.2)",
+            padding: "10px 20px", borderRadius: 30, fontFamily: "'DM Sans', sans-serif",
+            fontSize: 12, fontWeight: 600, letterSpacing: "0.06em", cursor: "pointer",
+            backdropFilter: "blur(10px)", display: "flex", alignItems: "center", gap: 8
+          }}
+        >
+          <Languages size={14} />
+          {isSwahili ? 'Switch to English' : 'Badilisha kuwa Kiswahili'}
+        </button>
+      </div>
+
       {/* Slide counter badge */}
       <div style={{
         position: "absolute", top: 100, right: 48,
@@ -213,7 +251,9 @@ const HeroSection: FC = () => {
         padding: "16px 24px", textAlign: "center", color: T.white,
       }}>
         <div style={{ fontSize: 28, fontWeight: 700, fontFamily: "'Playfair Display', serif" }}>500+</div>
-        <div style={{ fontSize: 12, letterSpacing: "0.12em", opacity: 0.75, marginTop: 4 }}>Satisfied Clients</div>
+        <div style={{ fontSize: 12, letterSpacing: "0.12em", opacity: 0.75, marginTop: 4 }}>
+          {isSwahili ? "Wateja Walioridhika" : "Satisfied Clients"}
+        </div>
         <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 10 }}>
           {[0,1,2].map(i => (
             <div key={i} style={{
@@ -227,23 +267,31 @@ const HeroSection: FC = () => {
 
       {/* Hero headline */}
       <div style={{ position: "relative", padding: "0 48px 60px", zIndex: 2 }}>
+        <div style={{ 
+          display: "inline-flex", alignItems: "center", gap: 8, 
+          padding: "8px 16px", borderRadius: 40, background: "rgba(255,255,255,0.1)",
+          border: "1px solid rgba(255,255,255,0.2)", color: T.gold, 
+          fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", marginBottom: 20
+        }}>
+          🌍 {t('hero.badge').toUpperCase()}
+        </div>
+
         <h1 style={{
           fontFamily: "'Playfair Display', Georgia, serif",
           fontSize: "clamp(48px, 7vw, 96px)",
           fontWeight: 700, color: T.white, lineHeight: 1.0,
           textTransform: "uppercase", letterSpacing: "-0.01em",
-          margin: "0 0 24px 0", maxWidth: 700,
+          margin: "0 0 24px 0", maxWidth: 800,
         }}>
-          Create Your<br />Dream Garden
+          {t('hero.titlePart1')}<br />
+          <span style={{ color: T.accent }}>{t('hero.titlePart2')}</span>
         </h1>
 
         <p style={{
-          color: "rgba(255,255,255,0.7)", maxWidth: 420, lineHeight: 1.65,
+          color: "rgba(255,255,255,0.7)", maxWidth: 460, lineHeight: 1.65,
           fontFamily: "'DM Sans', sans-serif", fontSize: 15, margin: "0 0 36px 0",
         }}>
-          Crafting dream gardens with passion, creativity, and sustainability. 
-          Supporting Kenya's <strong>15 Billion Trees Initiative</strong> through 
-          AI-driven health monitoring and carbon sequestration tracking.
+          {t('hero.description')}
         </p>
 
         <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
@@ -257,17 +305,17 @@ const HeroSection: FC = () => {
             }}
             onMouseEnter={handleGetStartedEnter}
             onMouseLeave={handleGetStartedLeave}
-          >Get Started</button>
+          >{t('hero.ctaScan')}</button>
 
           <button 
-            onClick={() => navigate("/drone-analysis")}
+            onClick={() => navigate("/about")}
             style={{
               background: "transparent", color: T.white,
               border: "1px solid rgba(255,255,255,0.4)",
               padding: "14px 32px", borderRadius: 4, fontFamily: "'DM Sans', sans-serif",
               fontSize: 13, fontWeight: 500, letterSpacing: "0.06em", cursor: "pointer",
               transition: "border-color 0.2s",
-            }}>Explore Projects</button>
+            }}>{t('hero.ctaImpact')}</button>
         </div>
       </div>
 
@@ -358,6 +406,8 @@ const HeroSection: FC = () => {
 /* ─── Global Impact Counter ─── */
 const GlobalImpactSection: FC = () => {
   const [count, setCount] = useState<number>(12450);
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -387,13 +437,15 @@ const GlobalImpactSection: FC = () => {
             fontFamily: "'Playfair Display', serif", 
             fontSize: 24, 
             marginBottom: 8 
-          }}>Community Impact</h3>
+          }}>{isSwahili ? "Matokeo kwa Jamii" : "Community Impact"}</h3>
           <p style={{ color: "rgba(255,255,255,0.6)", fontSize: 14 }}>
-            Join our community of environmental stewards tracking real-time carbon sequestration across Kenya.
+            {isSwahili 
+              ? "Jiunge na jamii yetu ya wasimamizi wa mazingira wanaofuatilia ufyonzwaji wa kaboni wa muda halisi kote Kenya."
+              : "Join our community of environmental stewards tracking real-time carbon sequestration across Kenya."}
           </p>
         </div>
         
-        <div style={{ display: "flex", gap: 48 }}>
+        <div style={{ display: "flex", gap: 48, flexWrap: "wrap", justifyContent: "center" }}>
           <div style={{ textAlign: "center" }}>
             <div style={{ 
               color: T.white, 
@@ -401,7 +453,9 @@ const GlobalImpactSection: FC = () => {
               fontWeight: 700, 
               fontFamily: "'DM Sans', sans-serif" 
             }}>{count.toLocaleString()} kg</div>
-            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>TOTAL CO2 SEQUESTERED</div>
+            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>
+              {isSwahili ? "JUMLA YA CO2 ILIYOFYONZWA" : "TOTAL CO2 SEQUESTERED"}
+            </div>
           </div>
           <div style={{ textAlign: "center" }}>
             <div style={{ 
@@ -410,7 +464,20 @@ const GlobalImpactSection: FC = () => {
               fontWeight: 700, 
               fontFamily: "'DM Sans', sans-serif" 
             }}>1,842</div>
-            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>TREES MONITORED</div>
+            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>
+              {isSwahili ? "MITI INAYOFUATILIWA" : "TREES MONITORED"}
+            </div>
+          </div>
+          <div style={{ textAlign: "center" }}>
+            <div style={{ 
+              color: T.white, 
+              fontSize: 36, 
+              fontWeight: 700, 
+              fontFamily: "'DM Sans', sans-serif" 
+            }}>KSh 45.2k</div>
+            <div style={{ color: T.gold, fontSize: 12, letterSpacing: "0.1em", marginTop: 4 }}>
+              {isSwahili ? "MIFUKO YA JAMII YA M-PESA" : "M-PESA COMMUNITY FUNDS"}
+            </div>
           </div>
         </div>
       </div>
@@ -421,6 +488,9 @@ const GlobalImpactSection: FC = () => {
 /* ─── Values / "We Are Different" Section ─── */
 const ValuesSection: FC = () => {
   const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>, enter: boolean) => {
     if (enter) {
       e.currentTarget.style.paddingLeft = "12px";
@@ -429,6 +499,20 @@ const ValuesSection: FC = () => {
     }
   };
 
+  const stats = [
+    { stat: "500+", label: isSwahili ? "Aina za Mimea" : "Plant Species" },
+    { stat: "98%", label: isSwahili ? "Kuridhika kwa Wateja" : "Client Satisfaction" },
+    { stat: "24/7", label: isSwahili ? "Msaada wa Kitaalamu" : "Expert Support" },
+    { stat: "10K+", label: isSwahili ? "Miradi Iliyokamilika" : "Projects Delivered" },
+  ];
+
+  const services = [
+    { num: "01", title: isSwahili ? "Ubunifu wa Mazingira" : "Landscape Design", desc: isSwahili ? "Mapendekezo ya mpangilio yaliyochambuliwa na AI, upandaji na upangaji wa msimu." : "AI-analysed layout recommendations, plant placement and seasonal planning.", link: "/drone-analysis" },
+    { num: "02", title: isSwahili ? "Ufuatiliaji wa Afya" : "Plant Health Monitoring", desc: isSwahili ? "Ugunduzi wa mapema wa magonjwa, ufuatiliaji wa virutubisho na tahadhari za mazingira." : "Early disease detection, nutrient tracking and environmental stress alerts.", link: "/scan" },
+    { num: "03", title: isSwahili ? "Umwagiliaji Mahiri" : "Smart Irrigation", desc: isSwahili ? "Ratiba zilizoboreshwa za maji zinazoendeshwa na data ya muda halisi ya udongo na hali ya hewa." : "Water-optimised schedules powered by real-time soil and weather data.", link: "/drone-analysis" },
+    { num: "04", title: isSwahili ? "Ushauri wa Kitaalamu" : "Expert Consultation", desc: isSwahili ? "Vikao vya moja kwa moja na wabunifu wa mazingira na wataalamu wa mimea walioidhinishwa." : "Live sessions with certified landscape designers and horticulturists.", link: "/specialist-chat" },
+  ];
+
   return (
     <section style={{ background: T.cream, padding: "100px 48px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -436,7 +520,7 @@ const ValuesSection: FC = () => {
           fontFamily: "'DM Sans', sans-serif", fontSize: 11, letterSpacing: "0.25em",
           color: T.muted, marginBottom: 60, display: "flex", alignItems: "center", gap: 12,
         }}>
-          <span style={{ color: T.muted }}>[ VALUES ]</span>
+          <span style={{ color: T.muted }}>[ {isSwahili ? "THAMANI" : "VALUES"} ]</span>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
@@ -447,23 +531,19 @@ const ValuesSection: FC = () => {
               color: T.darkGreen, lineHeight: 1.1, textTransform: "uppercase",
               letterSpacing: "-0.01em", margin: "0 0 32px 0",
             }}>
-              We Are<br /><em style={{ fontStyle: "italic", color: T.accent }}>Different</em>
+              {isSwahili ? "Tuko" : "We Are"}<br /><em style={{ fontStyle: "italic", color: T.accent }}>{isSwahili ? "Tofauti" : "Different"}</em>
             </h2>
             <p style={{
               fontFamily: "'DM Sans', sans-serif", fontSize: 15, lineHeight: 1.8,
               color: "#4A4A3A", maxWidth: 420, margin: "0 0 40px 0",
             }}>
-              Our platform fuses AI-powered plant diagnostics with hands-on landscape artistry —
-              delivering beauty, health, and sustainability in every outdoor space we touch.
+              {isSwahili 
+                ? "Mfumo wetu unaunganisha utambuzi wa mimea unaoendeshwa na AI na usanii wa mazingira — ukileta uzuri, afya, na uendelevu katika kila eneo la nje tunalogusa."
+                : "Our platform fuses AI-powered plant diagnostics with hands-on landscape artistry — delivering beauty, health, and sustainability in every outdoor space we touch."}
             </p>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}>
-              {([
-                { stat: "500+", label: "Plant Species" },
-                { stat: "98%", label: "Client Satisfaction" },
-                { stat: "24/7", label: "Expert Support" },
-                { stat: "10K+", label: "Projects Delivered" },
-              ] as StatItem[]).map(({ stat, label }) => (
+              {stats.map(({ stat, label }) => (
                 <div key={stat}>
                   <div style={{
                     fontFamily: "'Playfair Display', serif", fontSize: 40,
@@ -479,12 +559,7 @@ const ValuesSection: FC = () => {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {([
-              { num: "01", title: "Landscape Design", desc: "AI-analysed layout recommendations, plant placement and seasonal planning.", link: "/drone-analysis" },
-              { num: "02", title: "Plant Health Monitoring", desc: "Early disease detection, nutrient tracking and environmental stress alerts.", link: "/scan" },
-              { num: "03", title: "Smart Irrigation", desc: "Water-optimised schedules powered by real-time soil and weather data.", link: "/drone-analysis" },
-              { num: "04", title: "Expert Consultation", desc: "Live sessions with certified landscape designers and horticulturists.", link: "/specialist-chat" },
-            ] as ServiceItem[]).map(({ num, title, desc, link }) => (
+            {services.map(({ num, title, desc, link }) => (
               <div 
                 key={num} 
                 onClick={() => navigate(link)}
@@ -520,13 +595,16 @@ const ValuesSection: FC = () => {
 /* ─── Features Grid ─── */
 const FeaturesSection: FC = () => {
   const navigate = useNavigate();
+  const { t, currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+
   const features: Feature[] = [
-    { emoji: "🏡", title: "Landscape Design Analysis", desc: "AI analyses your entire landscape — plant placement, health signals, and aesthetic improvements for optimal outdoor living.", link: "/drone-analysis" },
-    { emoji: "🌿", title: "Plant Health Monitoring", desc: "Comprehensive monitoring detecting early signs of disease, nutrient deficiencies, and environmental stressors before they escalate.", link: "/scan" },
-    { emoji: "🛡️", title: "Landscape Protection Plans", desc: "Customised pest management, disease prevention, and seasonal care tailored to your climate and plant varieties.", link: "/plant-timeline" },
-    { emoji: "⚡", title: "Smart Irrigation Management", desc: "AI-powered water scheduling that reduces waste while ensuring every plant receives precisely the hydration it needs.", link: "/drone-analysis" },
-    { emoji: "📊", title: "Performance Analytics", desc: "Track health, growth, and beauty metrics over time with seasonal recommendations and performance insights.", link: "/profile" },
-    { emoji: "🌍", title: "Expert Knowledge Base", desc: "Access an extensive database of plant selection guides, maintenance schedules, and sustainable practices from industry pros.", link: "/plant-library" },
+    { emoji: "🏡", title: isSwahili ? "Uchambuzi wa Ubunifu wa Mazingira" : "Landscape Design Analysis", desc: isSwahili ? "AI inachambua mazingira yako yote — mpangilio wa mimea, ishara za afya, na maboresho ya urembo." : "AI analyses your entire landscape — plant placement, health signals, and aesthetic improvements for optimal outdoor living.", link: "/drone-analysis" },
+    { emoji: "🌿", title: isSwahili ? "Ufuatiliaji wa Afya ya Mimea" : "Plant Health Monitoring", desc: isSwahili ? "Ufuatiliaji kamili unaogundua ishara za mapema za magonjwa na virutubisho." : "Comprehensive monitoring detecting early signs of disease, nutrient deficiencies, and environmental stressors.", link: "/scan" },
+    { emoji: "🛡️", title: isSwahili ? "Mipango ya Ulinzi wa Mazingira" : "Landscape Protection Plans", desc: isSwahili ? "Udhibiti wa wadudu uliolengwa, kuzuia magonjwa, na utunzaji wa msimu uliotengenezwa kwa ajili yako." : "Customised pest management, disease prevention, and seasonal care tailored to your climate and plant varieties.", link: "/plant-timeline" },
+    { emoji: "⚡", title: isSwahili ? "Udhibiti wa Umwagiliaji Mahiri" : "Smart Irrigation Management", desc: isSwahili ? "Upangaji wa maji unaoendeshwa na AI unaopunguza upotevu huku ukihakikisha kila mmea unapata maji." : "AI-powered water scheduling that reduces waste while ensuring every plant receives precisely the hydration it needs.", link: "/drone-analysis" },
+    { emoji: "📊", title: isSwahili ? "Uchambuzi wa Utendaji" : "Performance Analytics", desc: isSwahili ? "Fuatilia vipimo vya afya, ukuaji, na urembo kwa muda na mapendekezo ya msimu." : "Track health, growth, and beauty metrics over time with seasonal recommendations and performance insights.", link: "/profile" },
+    { emoji: "🌍", title: isSwahili ? "Msingi wa Maarifa ya Kitaalamu" : "Expert Knowledge Base", desc: isSwahili ? "Fikia database kubwa ya miongozo ya uteuzi wa mimea, ratiba za matengenezo, na mazoea endelevu." : "Access an extensive database of plant selection guides, maintenance schedules, and sustainable practices from industry pros.", link: "/plant-library" },
   ];
 
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>, enter: boolean) => {
@@ -554,17 +632,20 @@ const FeaturesSection: FC = () => {
             <div style={{
               fontSize: 11, letterSpacing: "0.25em", color: T.muted,
               fontFamily: "'DM Sans', sans-serif", marginBottom: 16,
-            }}>[ CAPABILITIES ]</div>
+            }}>[ {isSwahili ? "UWEZO" : "CAPABILITIES"} ]</div>
             <h2 style={{
               fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3vw, 44px)",
               fontWeight: 700, color: T.darkGreen, textTransform: "uppercase", margin: 0,
-            }}>Complete<br /><em style={{ fontStyle: "italic", color: T.accent }}>Landscape Solutions</em></h2>
+            }}>
+              {isSwahili ? "Suluhu Kamili za" : "Complete"}<br />
+              <em style={{ fontStyle: "italic", color: T.accent }}>{isSwahili ? "Maeneo ya Nje" : "Landscape Solutions"}</em>
+            </h2>
           </div>
           <p style={{
             maxWidth: 360, fontSize: 14, lineHeight: 1.75, color: T.muted,
             fontFamily: "'DM Sans', sans-serif",
           }}>
-            Every tool you need to design, monitor, and maintain a thriving outdoor space — all in one platform.
+            {t('features.description')}
           </p>
         </div>
 
@@ -599,54 +680,60 @@ const FeaturesSection: FC = () => {
 };
 
 /* ─── AI Workflow ─── */
-const WorkflowSection: FC = () => (
-  <section style={{ background: T.cream, padding: "100px 48px" }}>
-    <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-      <div style={{ textAlign: "center", marginBottom: 80 }}>
-        <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.muted, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
-          [ AI WORKFLOW ]
-        </div>
-        <h2 style={{
-          fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3vw, 44px)",
-          fontWeight: 700, color: T.darkGreen, textTransform: "uppercase", margin: "0 0 20px",
-        }}>How Our AI<br /><em style={{ fontStyle: "italic", color: T.accent }}>Technology Works</em></h2>
-        <p style={{ fontSize: 15, color: T.muted, maxWidth: 560, margin: "0 auto", fontFamily: "'DM Sans', sans-serif", lineHeight: 1.75 }}>
-          From image upload to expert diagnosis — powered by advanced computer vision.
-        </p>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
-        {([
-          { num: "01", emoji: "📸", title: "Image Capture", desc: "Take a clear photo of the affected plant part using your smartphone camera." },
-          { num: "02", emoji: "🔄", title: "AI Processing", desc: "Our deep learning model extracts visual features and cross-references our disease database." },
-          { num: "03", emoji: "🔬", title: "Disease Analysis", desc: "AI identifies the issue with confidence scoring and severity assessment." },
-          { num: "04", emoji: "✅", title: "Expert Treatment", desc: "Receive AI-generated treatment plans validated by agricultural scientists." },
-        ] as WorkflowStep[]).map(({ num, emoji, title, desc }, i) => (
-          <div key={num} style={{
-            padding: "40px 32px",
-            borderRight: i < 3 ? "1px solid rgba(26,42,26,0.1)" : "none",
-            position: "relative",
-          }}>
-            <div style={{
-              fontFamily: "'Playfair Display', serif", fontSize: 48, fontWeight: 700,
-              color: "rgba(26,42,26,0.08)", lineHeight: 1, marginBottom: 24,
-            }}>{num}</div>
-            <div style={{ fontSize: 28, marginBottom: 16 }}>{emoji}</div>
-            <h3 style={{
-              fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 17,
-              color: T.darkGreen, marginBottom: 12,
-            }}>{title}</h3>
-            <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.7, fontFamily: "'DM Sans', sans-serif" }}>{desc}</p>
+const WorkflowSection: FC = () => {
+  const { t } = useLanguage();
+  return (
+    <section style={{ background: T.cream, padding: "100px 48px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 80 }}>
+          <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.muted, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
+            [ {t('workflow.tag')} ]
           </div>
-        ))}
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3vw, 44px)",
+            fontWeight: 700, color: T.darkGreen, textTransform: "uppercase", margin: "0 0 20px",
+          }}>{t('workflow.title')}</h2>
+          <p style={{ fontSize: 15, color: T.muted, maxWidth: 560, margin: "0 auto", fontFamily: "'DM Sans', sans-serif", lineHeight: 1.75 }}>
+            {t('workflow.description')}
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0 }}>
+          {([
+            { num: "01", emoji: "📸", title: t('workflow.step1Title'), desc: t('workflow.step1Desc') },
+            { num: "02", emoji: "🔄", title: t('workflow.step2Title'), desc: t('workflow.step2Desc') },
+            { num: "03", emoji: "🔬", title: t('workflow.step3Title'), desc: t('workflow.step3Desc') },
+            { num: "04", emoji: "✅", title: t('workflow.step4Title'), desc: t('workflow.step4Desc') },
+          ] as WorkflowStep[]).map(({ num, emoji, title, desc }, i) => (
+            <div key={num} style={{
+              padding: "40px 32px",
+              borderRight: i < 3 ? "1px solid rgba(26,42,26,0.1)" : "none",
+              position: "relative",
+            }}>
+              <div style={{
+                fontFamily: "'Playfair Display', serif", fontSize: 48, fontWeight: 700,
+                color: "rgba(26,42,26,0.08)", lineHeight: 1, marginBottom: 24,
+              }}>{num}</div>
+              <div style={{ fontSize: 28, marginBottom: 16 }}>{emoji}</div>
+              <h3 style={{
+                fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 17,
+                color: T.darkGreen, marginBottom: 12,
+              }}>{title}</h3>
+              <p style={{ fontSize: 13, color: T.muted, lineHeight: 1.7, fontFamily: "'DM Sans', sans-serif" }}>{desc}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 /* ─── Expert Chat ─── */
 const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
   const navigate = useNavigate();
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+
   const handleCardHover = (e: React.MouseEvent<HTMLDivElement>, enter: boolean) => {
     e.currentTarget.style.background = enter ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.05)";
   };
@@ -664,21 +751,25 @@ const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
   return (
     <section style={{ background: T.darkGreen, padding: "100px 48px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
+        <div style={{ gridTemplateColumns: "1fr 1fr", display: "grid", gap: 80, alignItems: "center" }}>
           <div>
             <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.gold, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
-              [ PROFESSIONAL EXPERTS ]
+              [ {isSwahili ? "WATAALAMU WA KITAALAMU" : "PROFESSIONAL EXPERTS"} ]
             </div>
             <h2 style={{
               fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3vw, 44px)",
               fontWeight: 700, color: T.white, textTransform: "uppercase", margin: "0 0 24px",
-            }}>Connect With<br /><em style={{ fontStyle: "italic", color: T.gold }}>Specialists</em></h2>
+            }}>
+              {isSwahili ? "Wasiliana na" : "Connect With"}<br />
+              <em style={{ fontStyle: "italic", color: T.gold }}>{isSwahili ? "Wataalamu" : "Specialists"}</em>
+            </h2>
             <p style={{
               fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.8,
               fontFamily: "'DM Sans', sans-serif", marginBottom: 40,
             }}>
-              Get personalised guidance from certified landscape designers, horticulturists,
-              and outdoor living experts ready to transform your property.
+              {isSwahili 
+                ? "Pata mwongozo uliolengwa kutoka kwa wabunifu wa mazingira walioidhinishwa, wataalamu wa mimea, na wataalamu wa maisha ya nje."
+                : "Get personalised guidance from certified landscape designers, horticulturists, and outdoor living experts ready to transform your property."}
             </p>
             <Link 
               to={user ? "/specialist-chat" : "/auth"} 
@@ -693,16 +784,16 @@ const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
               onMouseLeave={(e) => handleLinkHover(e, false)}
             >
               <MessageSquare size={16} />
-              Start Consultation
+              {isSwahili ? "Anza Ushauri" : "Start Consultation"}
               <ArrowRight size={14} />
             </Link>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {([
-              { initials: "DR", name: "Dr. Maria Rodriguez", role: "Landscape Pathologist", online: true },
-              { initials: "JT", name: "John Thompson", role: "Sustainable Designer", online: false },
-              { initials: "SC", name: "Dr. Sarah Chen", role: "Landscape Horticulturist", online: true },
+              { initials: "DR", name: "Dr. Maria Rodriguez", role: isSwahili ? "Mtaalamu wa Magonjwa" : "Landscape Pathologist", online: true },
+              { initials: "JT", name: "John Thompson", role: isSwahili ? "Mbunifu Endelevu" : "Sustainable Designer", online: false },
+              { initials: "SC", name: "Dr. Sarah Chen", role: isSwahili ? "Mtaalamu wa Mimea" : "Landscape Horticulturist", online: true },
             ] as Expert[]).map(({ initials, name, role, online }) => (
               <div 
                 key={name} 
@@ -729,7 +820,7 @@ const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <div style={{ width: 8, height: 8, borderRadius: "50%", background: online ? "#4ade80" : T.gold }} />
-                  <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>{online ? "Online" : "Busy"}</span>
+                  <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>{online ? (isSwahili ? "Yupo" : "Online") : (isSwahili ? "Ana Kazi" : "Busy")}</span>
                 </div>
               </div>
             ))}
@@ -743,6 +834,9 @@ const ExpertSection: FC<ExpertSectionProps> = ({ user }) => {
 /* ─── CTA ─── */
 const CtaSection: FC = () => {
   const navigate = useNavigate();
+  const { t, currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+  
   return (
     <section style={{
       background: `linear-gradient(135deg, ${T.forestGreen} 0%, ${T.darkGreen} 100%)`,
@@ -750,14 +844,14 @@ const CtaSection: FC = () => {
     }}>
       <div style={{ maxWidth: 700, margin: "0 auto" }}>
         <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.gold, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
-          [ PROFESSIONAL LANDSCAPING SOLUTIONS ]
+          [ {t('cta.tag')} ]
         </div>
         <h2 style={{
           fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4vw, 56px)",
           fontWeight: 700, color: T.white, textTransform: "uppercase", margin: "0 0 24px",
-        }}>Transform Your<br /><em style={{ fontStyle: "italic", color: T.gold }}>Outdoor Spaces Today</em></h2>
+        }}>{t('cta.title')}</h2>
         <p style={{ fontSize: 15, color: "rgba(255,255,255,0.65)", lineHeight: 1.8, marginBottom: 48, fontFamily: "'DM Sans', sans-serif" }}>
-          Join thousands of homeowners and landscape professionals who trust our AI-powered platform.
+          {t('cta.description')}
         </p>
         <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
           <button 
@@ -766,17 +860,19 @@ const CtaSection: FC = () => {
               background: T.white, color: T.darkGreen, border: "none",
               padding: "16px 40px", borderRadius: 4, fontWeight: 600, fontSize: 13,
               letterSpacing: "0.06em", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
-            }}>Start Landscape Analysis ⚡</button>
+            }}>{t('cta.btnScan')} ⚡</button>
           <button 
             onClick={() => navigate("/plant-store")}
             style={{
               background: "transparent", color: T.white, border: "1px solid rgba(255,255,255,0.35)",
               padding: "16px 40px", borderRadius: 4, fontWeight: 500, fontSize: 13,
               letterSpacing: "0.06em", cursor: "pointer", fontFamily: "'DM Sans', sans-serif",
-            }}>Landscaping Services</button>
+            }}>{isSwahili ? "Huduma za Mazingira" : "Landscaping Services"}</button>
         </div>
         <p style={{ marginTop: 24, color: "rgba(255,255,255,0.4)", fontSize: 12, fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.12em" }}>
-          🌟 Free landscape analysis &nbsp;•&nbsp; 🏡 Design consultation &nbsp;•&nbsp; 🌿 Plant health monitoring
+          {isSwahili 
+            ? "🌟 Uchambuzi wa bure wa mazingira • 🏡 Ushauri wa muundo • 🌿 Ufuatiliaji wa afya ya mimea"
+            : "🌟 Free landscape analysis • 🏡 Design consultation • 🌿 Plant health monitoring"}
         </p>
       </div>
     </section>
@@ -784,81 +880,93 @@ const CtaSection: FC = () => {
 };
 
 /* ─── Testimonials ─── */
-const TestimonialsSection: FC = () => (
-  <section style={{ background: T.cream, padding: "100px 48px" }}>
-    <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-      <div style={{ textAlign: "center", marginBottom: 64 }}>
-        <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.muted, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
-          [ TESTIMONIALS ]
-        </div>
-        <h2 style={{
-          fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3vw, 44px)",
-          fontWeight: 700, color: T.darkGreen, textTransform: "uppercase", margin: 0,
-        }}>What Our Users Say 🌟</h2>
-        <p style={{ marginTop: 16, color: T.muted, fontFamily: "'DM Sans', sans-serif", fontSize: 14 }}>
-          Thousands of farmers and gardeners trust Hedges Care to protect their plants.
-        </p>
-      </div>
+const TestimonialsSection: FC = () => {
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
-        {([
-          { init: "J", name: "Ann Njeru 🐯", role: "Small-scale Farmer", quote: "Crop Doctor has transformed how I manage my farm. Identifying diseases early has saved me thousands in potential crop losses. Highly recommend! 🌱" },
-          { init: "S", name: "Stephen Ndwiga 🐯", role: "Urban Gardener", quote: "As a hobby gardener, I was always struggling with plant diseases. Crop Doctor makes it so easy to identify and treat problems! My garden has never looked better. 🌿" },
-          { init: "R", name: "Wilson Omondi 🐯", role: "Commercial Grower", quote: "This app has become an essential tool for our farm operations. The instant diagnosis helps us take action quickly and protect our yields. Worth every penny! 💯" },
-        ] as Testimonial[]).map(({ init, name, role, quote }) => (
-          <div key={name} style={{
-            background: T.white, padding: "40px 36px",
-            border: "1px solid rgba(26,42,26,0.07)",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: "50%",
-                background: `linear-gradient(135deg, ${T.accent}, ${T.forestGreen})`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: T.white, fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
-              }}>{init}</div>
-              <div>
-                <div style={{ fontWeight: 600, color: T.darkGreen, fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>{name}</div>
-                <div style={{ fontSize: 12, color: T.muted }}>{role}</div>
-              </div>
-            </div>
-            <div style={{ width: 24, height: 2, background: T.accent, marginBottom: 20 }} />
-            <p style={{ fontSize: 14, color: "#4A4A3A", lineHeight: 1.75, fontStyle: "italic", fontFamily: "'DM Sans', sans-serif" }}>
-              "{quote}"
-            </p>
+  const testimonials = [
+    { init: "A", name: "Ann Njeru 👨‍🌾", role: isSwahili ? "Mkulima Mdogo" : "Small-scale Farmer", quote: isSwahili ? "Hedges Care imebadilisha jinsi ninavyosimamia shamba langu. Kutambua magonjwa mapema kumeniokoa maelfu ya hasara za mazao. Naipendekeza sana! 🌱" : "Hedges Care has transformed how I manage my farm. Identifying diseases early has saved me thousands in potential crop losses. Highly recommend! 🌱" },
+    { init: "S", name: "Stephen Ndwiga 👩‍🌾", role: isSwahili ? "Mkulima wa Mijini" : "Urban Gardener", quote: isSwahili ? "Kama mpenzi wa bustani, nilikuwa nikihangaika na magonjwa ya mimea. Hedges Care inafanya iwe rahisi kutambua na kutibu matatizo! Bustani yangu haijawahi kuonekana vizuri hivi. 🌿" : "As a hobby gardener, I was always struggling with plant diseases. Hedges Care makes it so easy to identify and treat problems! My garden has never looked better. 🌿" },
+    { init: "W", name: "Wilson Omondi 🧑‍🌾", role: isSwahili ? "Mzalishaji wa Biashara" : "Commercial Grower", quote: isSwahili ? "Programu hii imekuwa chombo muhimu kwa shughuli zetu za shamba. Utambuzi wa papo hapo unatusaidia kuchukua hatua haraka na kulinda mavuno yetu. Inastahili kila senti! 💯" : "This app has become an essential tool for our farm operations. The instant diagnosis helps us take action quickly and protect our yields. Worth every penny! 💯" },
+  ];
+
+  return (
+    <section style={{ background: T.cream, padding: "100px 48px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 64 }}>
+          <div style={{ fontSize: 11, letterSpacing: "0.25em", color: T.muted, fontFamily: "'DM Sans', sans-serif", marginBottom: 16 }}>
+            [ {isSwahili ? "USHUHUDA" : "TESTIMONIALS"} ]
           </div>
-        ))}
+          <h2 style={{
+            fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3vw, 44px)",
+            fontWeight: 700, color: T.darkGreen, textTransform: "uppercase", margin: 0,
+          }}>{isSwahili ? "Watumiaji Wetu Wanasema Nini 🌟" : "What Our Users Say 🌟"}</h2>
+          <p style={{ marginTop: 16, color: T.muted, fontFamily: "'DM Sans', sans-serif", fontSize: 14 }}>
+            {isSwahili 
+              ? "Maelfu ya wakulima na wapenzi wa bustani wanaamini Hedges Care kulinda mimea yao."
+              : "Thousands of farmers and gardeners trust Hedges Care to protect their plants."}
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
+          {testimonials.map(({ init, name, role, quote }) => (
+            <div key={name} style={{
+              background: T.white, padding: "40px 36px",
+              border: "1px solid rgba(26,42,26,0.07)",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24 }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: "50%",
+                  background: `linear-gradient(135deg, ${T.accent}, ${T.forestGreen})`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: T.white, fontWeight: 700, fontFamily: "'DM Sans', sans-serif",
+                }}>{init}</div>
+                <div>
+                  <div style={{ fontWeight: 600, color: T.darkGreen, fontSize: 14, fontFamily: "'DM Sans', sans-serif" }}>{name}</div>
+                  <div style={{ fontSize: 12, color: T.muted }}>{role}</div>
+                </div>
+              </div>
+              <div style={{ width: 24, height: 2, background: T.accent, marginBottom: 20 }} />
+              <p style={{ fontSize: 14, color: "#4A4A3A", lineHeight: 1.75, fontStyle: "italic", fontFamily: "'DM Sans', sans-serif" }}>
+                "{quote}"
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 /* ─── Footer ─── */
 const FooterSection: FC = () => {
+  const { currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
+
   const handleLinkHover = (e: React.MouseEvent<HTMLAnchorElement>, enter: boolean) => {
     e.currentTarget.style.color = enter ? T.white : "rgba(255,255,255,0.5)";
   };
 
   const footerCols: FooterColumn[] = [
-    { title: "Features", links: [
-      { label: "AI Plant Detection", to: "/scan" },
-      { label: "Plant Encyclopedia", to: "/plant-library" },
-      { label: "Tutorial Videos", to: "/video-library" },
-      { label: "Expert Chat", to: "/specialist-chat" },
-      { label: "Community Forum", to: "/community-forum" }
+    { title: isSwahili ? "Vipengele" : "Features", links: [
+      { label: isSwahili ? "Uchambuzi wa AI" : "AI Plant Detection", to: "/scan" },
+      { label: isSwahili ? "Maktaba ya Mimea" : "Plant Encyclopedia", to: "/plant-library" },
+      { label: isSwahili ? "Mafunzo ya Video" : "Tutorial Videos", to: "/video-library" },
+      { label: isSwahili ? "Ongea na Mtaalamu" : "Expert Chat", to: "/specialist-chat" },
+      { label: isSwahili ? "Jukwaa la Jamii" : "Community Forum", to: "/community-forum" }
     ]},
-    { title: "Company", links: [
-      { label: "About Us", to: "/about" },
-      { label: "Pricing", to: "/subscription" },
-      { label: "Drone Analysis", to: "/drone-analysis" },
-      { label: "Partnerships", to: "/partnerships" },
-      { label: "Contact Us", to: "/community-forum" }
+    { title: isSwahili ? "Kampuni" : "Company", links: [
+      { label: isSwahili ? "Kuhusu Sisi" : "About Us", to: "/about" },
+      { label: isSwahili ? "Bei" : "Pricing", to: "/subscription" },
+      { label: isSwahili ? "Uchambuzi wa Drone" : "Drone Analysis", to: "/drone-analysis" },
+      { label: isSwahili ? "Ushirikiano" : "Partnerships", to: "/partnerships" },
+      { label: isSwahili ? "Wasiliana Nasi" : "Contact Us", to: "/community-forum" }
     ]},
-    { title: "Legal", links: [
-      { label: "Terms of Service", to: "#" },
-      { label: "Privacy Policy", to: "#" },
-      { label: "Cookie Policy", to: "#" },
-      { label: "Data Protection", to: "#" }
+    { title: isSwahili ? "Kisheria" : "Legal", links: [
+      { label: isSwahili ? "Masharti ya Huduma" : "Terms of Service", to: "#" },
+      { label: isSwahili ? "Sera ya Faragha" : "Privacy Policy", to: "#" },
+      { label: isSwahili ? "Sera ya Cookie" : "Cookie Policy", to: "#" },
+      { label: isSwahili ? "Ulinzi wa Data" : "Data Protection", to: "#" }
     ]},
   ];
 
@@ -870,11 +978,13 @@ const FooterSection: FC = () => {
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
               <span style={{ fontSize: 20 }}>🌿</span>
               <span style={{ fontFamily: "'Playfair Display', serif", color: T.white, fontSize: 18, fontWeight: 600 }}>
-                AI Plant Detector
+                Hedges Care AI
               </span>
             </div>
             <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, lineHeight: 1.75, maxWidth: 260, fontFamily: "'DM Sans', sans-serif", marginBottom: 24 }}>
-              Revolutionizing outdoor & indoor spaces with AI-powered plant detection and expert landscaping advice.
+              {isSwahili 
+                ? "Kubadilisha maeneo ya nje na ndani kwa kutumia utambuzi wa mimea unaoendeshwa na AI na ushauri wa kitaalamu."
+                : "Revolutionizing outdoor & indoor spaces with AI-powered plant detection and expert landscaping advice."}
             </p>
             <div style={{ display: "flex", gap: 16 }}>
               {["f", "𝕏", "ig"].map(s => (
@@ -915,7 +1025,7 @@ const FooterSection: FC = () => {
 
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 32, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, fontFamily: "'DM Sans', sans-serif" }}>
-            © 2026 Hedges Care. All rights reserved.
+            © {new Date().getFullYear()} Hedges Care. {isSwahili ? "Haki zote zimehifadhiwa." : "All rights reserved."}
           </span>
           <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
             {["M-Pesa", "Visa", "MasterCard"].map(pm => (
@@ -927,7 +1037,7 @@ const FooterSection: FC = () => {
             ))}
           </div>
           <span style={{ color: T.gold, fontSize: 12, fontFamily: "'DM Sans', sans-serif" }}>
-            Made by Phr3edevelopers 🇰🇪
+            {isSwahili ? "Imetengenezwa na" : "Made by"} Phr3edevelopers 🇰🇪
           </span>
         </div>
       </div>
@@ -938,6 +1048,8 @@ const FooterSection: FC = () => {
 /* ─── Root ─── */
 const Landing: FC = () => {
   const { user } = useAuth();
+  const { currentRegion } = useRegion();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const link = document.createElement("link");
@@ -950,6 +1062,37 @@ const Landing: FC = () => {
     <div style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <Navbar />
       <HeroSection />
+      
+      {/* Dynamic Community Impact Section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
+          <div className="text-center md:text-left">
+            <h2 className="text-3xl md:text-4xl font-bold text-emerald-900 mb-2">
+              {t('impact.title')}<span className="text-emerald-600">{currentRegion.name}</span>
+            </h2>
+            <p className="text-gray-600 max-w-lg">
+              {t('impact.description')}
+            </p>
+          </div>
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xs font-semibold text-emerald-700 tracking-widest uppercase">{t('impact.selectorTag')}</span>
+            <RegionSelector />
+          </div>
+        </div>
+        
+        <CommunityImpact />
+        
+        <div className="mt-8 text-center">
+          <Link 
+            to="/pest-prediction" 
+            className="inline-flex items-center gap-2 text-emerald-700 font-semibold hover:text-emerald-800 transition-colors group"
+          >
+            {t('impact.linkDetail')}
+            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </div>
+
       <GlobalImpactSection />
       <ValuesSection />
       <FeaturesSection />

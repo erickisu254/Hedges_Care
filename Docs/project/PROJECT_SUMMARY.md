@@ -2,36 +2,41 @@
 
 ## Executive Summary
 
-**Hedges Care** is an innovative AI-powered platform that revolutionizes plant healthcare while contributing to environmental sustainability. By combining cutting-edge machine learning with blockchain technology, the application creates a comprehensive ecosystem for plant management, environmental monitoring, and carbon footprint tracking.
+**Hedges Care** is an innovative AI-powered platform that revolutionizes plant healthcare while contributing to environmental sustainability and local community resilience. By combining cutting-edge machine learning with local financial systems (M-Pesa) and a "Harambee" (collective effort) approach, the application creates a comprehensive ecosystem for plant management, environmental monitoring, and community-driven climate action.
 
 ### Key Differentiators
-- **Dual Focus**: Practical plant management + environmental impact measurement
+- **Social Good Focus**: Data-driven solutions for local community challenges
+- **Harambee Framework**: Collective tracking of CO2 sequestration and national tree goals
+- **Financial Inclusion**: Integrated M-Pesa gateway for local accessibility
+- **Inclusive Design**: Full Swahili localization and voice-to-diagnosis accessibility
 - **National Impact**: Direct support for Kenya's **15 Billion Trees Initiative**
-- **Technology Integration**: AI analysis + NFT verification + PWA (Offline Support)
-- **Scientific Foundation**: Data-driven CO2 absorption calculations
-- **Global Alignment**: Direct contribution to UN SDG 15: Life on Land
+- **Scientific Foundation**: Predictive modeling for regional pest outbreaks
 
 ---
 
 ## Core Features Overview
 
-### 1. AI-Powered Plant Analysis
+### 1. AI-Powered Shamba Analysis
 - **96% accuracy** in species identification and health assessment
-- **1000+ plant species** in global database
-- **Real-time processing** with 5-stage analysis pipeline
-- **Local Context**: Swahili and Yoruba localization for regional impact
+- **Harambee Narrative**: Focused on food security and local agricultural resilience
+- **Voice Assistant**: Swahili and English support for hands-free diagnostics
+- **Local Context**: Full Kiswahili translation for regional impact
 
-### 2. Environmental Impact Measurement
+### 2. Environmental & Community Analytics
 - **Scientific CO2 absorption** calculations based on species, health, and size
-- **Community Impact Counter**: Real-time tracking of aggregate carbon sequestration
-- **Outbreak Heatmap**: Regional visualization of plant disease reports
-- **Visual dashboards** showing individual and community impact over time
+- **Harambee Impact Dashboard**: Real-time tracking of community-wide environmental gains
+- **AI Shamba Alerts**: Regional predictive analytics for early pest detection
+- **Climate-Smart Strategy**: Localized planting recommendations based on regional data
 
-### 3. Progressive Web App (PWA)
+### 3. Financial Inclusion & Payments
+- **M-Pesa Gateway**: Seamless local payments for subscriptions and consultations
+- **Community Fund Metrics**: Tracking how local contributions drive restoration
+- **Marketplace**: Accessibility-first economy built for local farmers and youth
+
+### 4. Progressive Web App (PWA)
 - **Offline Capabilities**: Use the app in remote fields without internet
-- **Installable**: Full app experience on mobile without app store downloads
-- **Push Notifications**: Real-time alerts for local disease outbreaks
-- **High Performance**: Optimized for low-bandwidth environments
+- **Low-Bandwidth Optimization**: Built for high performance in varied connectivity
+- **Push Notifications**: Real-time alerts for local community threats
 
 ### 3. NFT Integration
 - **Plant verification NFTs** representing environmental impact

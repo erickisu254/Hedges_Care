@@ -1,27 +1,30 @@
 
 import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const WorkflowSection = () => {
+  const { t } = useLanguage();
+
   const steps = [
     {
       number: 1,
-      title: "📸 Image Capture",
-      description: "Take a clear photo of the affected plant part using your smartphone camera."
+      title: t('workflow.step1Title'),
+      description: t('workflow.step1Desc')
     },
     {
       number: 2,
-      title: "🔄 AI Processing",
-      description: "Our deep learning model extracts visual features and compares them against our disease database."
+      title: t('workflow.step2Title'),
+      description: t('workflow.step2Desc')
     },
     {
       number: 3,
-      title: "🧪 Disease Analysis",
-      description: "The AI identifies the disease with confidence scoring and severity assessment."
+      title: t('workflow.step3Title'),
+      description: t('workflow.step3Desc')
     },
     {
       number: 4,
-      title: "✅ Expert Treatment",
-      description: "Receive AI-generated treatment plans validated by agricultural scientists."
+      title: t('workflow.step4Title'),
+      description: t('workflow.step4Desc')
     }
   ];
 
@@ -29,10 +32,10 @@ const WorkflowSection = () => {
     <div className="py-16 bg-green-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-medium text-sm mb-2">🔍 AI WORKFLOW</span>
-          <h2 className="text-3xl font-bold text-green-800 mb-4">How Our AI Technology Works 🧠</h2>
+          <span className="inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-medium text-sm mb-2">{t('workflow.tag')}</span>
+          <h2 className="text-3xl font-bold text-green-800 mb-4">{t('workflow.title')}</h2>
           <p className="text-lg text-green-700 max-w-3xl mx-auto">
-            From image upload to diagnosis, our advanced AI processes your plant images using state-of-the-art computer vision techniques.
+            {t('workflow.description')}
           </p>
         </div>
 

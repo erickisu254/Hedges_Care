@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle, HelpCircle, Loader2, TreePine, Leaf, Droplets, Wallet } from "lucide-react";
+import { CheckCircle, AlertTriangle, HelpCircle, Loader2, TreePine, Leaf, Droplets, Wallet, Globe } from "lucide-react";
 import { AIAnalysisResult } from "@/services/enhancedAIService";
 
 interface DiagnosisResultProps {
@@ -118,6 +118,39 @@ const DiagnosisResult: React.FC<DiagnosisResultProps> = ({
                 </h4>
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <p className="text-gray-600 whitespace-pre-line">{advice}</p>
+                </div>
+              </div>
+            )}
+
+            {analysisResult?.plant?.co2_absorption && (
+              <div className="bg-gradient-to-r from-emerald-500 to-green-600 p-6 rounded-2xl border border-emerald-400 text-white shadow-inner relative overflow-hidden group">
+                {/* Decorative background element */}
+                <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-700">
+                  <Globe className="h-32 w-32" />
+                </div>
+                
+                <h4 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="text-2xl">🤝</span>
+                  Social Good Impact Summary
+                </h4>
+                
+                <div className="space-y-4 relative z-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20">
+                      <p className="text-xs text-emerald-100 uppercase tracking-widest font-semibold mb-1">National Goal</p>
+                      <p className="text-sm font-medium">Contributes to 15B Trees Goal</p>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur-md p-3 rounded-xl border border-white/20">
+                      <p className="text-xs text-emerald-100 uppercase tracking-widest font-semibold mb-1">Financial Inclusion</p>
+                      <p className="text-sm font-medium">Verified by M-Pesa Economy</p>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-emerald-950/20 p-4 rounded-xl border border-emerald-400/30">
+                    <p className="text-sm leading-relaxed">
+                      "By identifying and nurturing this <strong>{diagnosis}</strong>, you are helping sequester <strong>{analysisResult.plant.co2_absorption.annual.toFixed(1)}kg of CO₂</strong> annually. This data strengthens your community's climate resilience report."
+                    </p>
+                  </div>
                 </div>
               </div>
             )}

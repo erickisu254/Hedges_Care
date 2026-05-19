@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Languages } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const HeroSection = () => {
   const { user } = useAuth();
+  const { t, currentLanguage, setLanguage } = useLanguage();
+
+  const toggleLanguage = () => {
+    setLanguage(currentLanguage.code === 'en' ? 'sw' : 'en');
+  };
   
   return (
     <div className="relative bg-gradient-to-br from-emerald-50 via-green-50 to-amber-50">
@@ -38,21 +44,34 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 py-16 md:py-32 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
-            {/* Enhanced badge with landscape theme */}
+            {/* Language Toggle Button for Hero */}
+            <div className="flex justify-start mb-2">
+              <Button 
+                onClick={toggleLanguage}
+                variant="outline" 
+                size="sm"
+                className="gap-2 border-emerald-200 bg-white/50 backdrop-blur-sm text-emerald-800 hover:bg-emerald-100 shadow-sm"
+              >
+                <Languages className="h-4 w-4" />
+                {currentLanguage.code === 'en' ? 'Badilisha lugha kuwa Kiswahili' : 'Switch to English'}
+              </Button>
+            </div>
+
+            {/* Enhanced badge with social good theme */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-100 to-green-100 border border-emerald-200 text-emerald-800 font-medium text-sm mb-4 shadow-sm">
-              <span className="text-lg">🌿</span>
-              <span>Professional Landscape Health Management</span>
+              <span className="text-lg">🌍</span>
+              <span>{t('hero.badge')}</span>
             </div>
             
-            {/* Enhanced heading with landscape focus */}
+            {/* Enhanced heading with social good focus */}
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight">
-              Transform Your <span className="text-emerald-600">Outdoor Spaces</span> <br />
-              <span className="text-green-600">With Smart Landscaping</span> 🏡
+              {t('hero.titlePart1')}<span className="text-emerald-600">{t('hero.titlePart2')}</span> <br />
+              <span className="text-green-600">{t('hero.titlePart3')}</span> 🌿
             </h1>
             
             {/* Enhanced description */}
             <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-              Our advanced AI technology monitors and enhances landscape health across your entire property. From residential gardens to commercial landscapes, get expert insights and recommendations to create beautiful, sustainable outdoor environments that thrive year-round.
+              {t('hero.description')}
             </p>
             
             {/* Enhanced CTA buttons */}
@@ -62,7 +81,7 @@ const HeroSection = () => {
                 className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-10 py-4 rounded-xl text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center gap-2"
               >
                 <Link to={user ? "/scan" : "/auth"}>
-                  Start Landscape Analysis
+                  {t('hero.ctaScan')}
                   <ChevronRight className="h-5 w-5" />
                 </Link>
               </Button>
@@ -71,7 +90,7 @@ const HeroSection = () => {
                 variant="outline"
                 className="border-emerald-500 text-emerald-600 hover:bg-emerald-50 px-10 py-4 rounded-xl text-lg transition-all duration-300 hover:scale-105 hover:border-emerald-600"
               >
-                <Link to="/about">Landscaping Services</Link>
+                <Link to="/about">{t('hero.ctaImpact')}</Link>
               </Button>
             </div>
             
@@ -79,15 +98,15 @@ const HeroSection = () => {
             <div className="flex items-center gap-8 pt-4 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <span className="text-emerald-600">✓</span>
-                <span>Professional Landscaping</span>
+                <span>Data for Social Good</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-emerald-600">✓</span>
-                <span>10,000+ Satisfied Clients</span>
+                <span>Climate Resilience</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-emerald-600">✓</span>
-                <span>Expert Horticulture</span>
+                <span>M-Pesa Integrated</span>
               </div>
             </div>
           </div>

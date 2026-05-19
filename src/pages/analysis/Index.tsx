@@ -5,7 +5,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/AuthProvider";
 import { ScanHistory } from "@/types/database";
-import { Camera, CheckCircle, BookOpen, MessageSquare, Wallet } from "lucide-react";
+import { Camera, CheckCircle, BookOpen, MessageSquare } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { mockDataService } from "@/services/mockDataService";
 import { EnhancedAIService, AIAnalysisResult } from "@/services/enhancedAIService";
 import { NFTMintingModal } from "@/components/nft/NFTMintingModal";
@@ -21,7 +22,8 @@ import AboutContent from "@/components/about/AboutContent";
 import TimelineIntegration from "@/components/scan/TimelineIntegration";
 import QuickActions from "@/components/dashboard/QuickActions";
 import RecentActivity from "@/components/dashboard/RecentActivity";
-import AdvancedAnalytics from "@/components/analytics/AdvancedAnalytics";
+import { CommunityImpact } from "@/components/analytics/CommunityImpact";
+import VoiceAssistant from "@/components/voice/VoiceAssistant";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 type ScanResult = {
@@ -145,7 +147,7 @@ const samplePlants = [
 const Index = () => {
   const location = useLocation();
   const { user, isUsingMockData } = useAuth();
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
   const [image, setImage] = useState<string | null>(null);
   const [advice, setAdvice] = useState<string | null>(null);
   const [diagnosis, setDiagnosis] = useState<string | null>(null);
@@ -166,6 +168,13 @@ const Index = () => {
   const [analysisResult, setAnalysisResult] = useState<AIAnalysisResult | null>(null);
   const [showNFTModal, setShowNFTModal] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === "/scan") setActiveTab("scan");
+    else if (path === "/history") setActiveTab("history");
+    else if (path === "/about") setActiveTab("about");
+  }, [location.pathname]);
 
   const fetchScanHistory = useCallback(async () => {
     try {
@@ -410,10 +419,10 @@ const Index = () => {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="scan" className="space-y-6">
+          <TabsContent value="scan">
             <ScanHeader
-              title="Hedges Care AI"
-              description="Our advanced AI model analyzes plant images to identify species, measure environmental impact, and provide expert landscaping recommendations for optimal plant health and carbon sequestration."
+              title={currentLanguage.code === 'sw' ? "Hedges Care AI: Uchambuzi wa Shamba" : "Hedges Care AI: Shamba Analysis"}
+              description={currentLanguage.code === 'sw' ? "Tumia AI kutambua afya ya mimea yako na kupata mapendekezo ya kitaalamu ya mazingira." : "Use AI to identify your plant's health and receive expert environmental recommendations."}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
@@ -456,13 +465,39 @@ const Index = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <ImageUpload 
-                image={image}
-                isLoading={isLoading}
-                handleImageUpload={handleImageUpload}
-                handleAnalyze={handleAnalyze}
-                setImage={setImage}
-              />
+              <div className="space-y-6">
+                <ImageUpload 
+                  image={image}
+                  isLoading={isLoading}
+                  handleImageUpload={handleImageUpload}
+                  handleAnalyze={handleAnalyze}
+                  setImage={setImage}
+                />
+                
+                <Card className="bg-emerald-50 border-emerald-100">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium flex items-center gap-2">
+                      <MessageSquare className="h-4 w-4 text-emerald-600" />
+                      {t('voice.accessibility')}
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      {t('voice.desc')}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <VoiceAssistant 
+                      onVoiceCommand={(command) => {
+                        toast({
+                          title: currentLanguage.code === 'sw' ? "Symptom Imerekodiwa" : "Symptom Recorded",
+                          description: currentLanguage.code === 'sw' ? `AI inajumuisha: "${command}" katika uchambuzi.` : `AI is incorporating: "${command}" into the analysis.`,
+                        });
+                        // In a real app, this would be sent to the LLM/CNN model
+                      }}
+                      textToSpeak={diagnosis ? (currentLanguage.code === 'sw' ? `Nimetambua hii kama ${diagnosis}. Mapendekezo yangu ni ${advice}` : `I have identified this as ${diagnosis}. My recommendation is ${advice}`) : undefined}
+                    />
+                  </CardContent>
+                </Card>
+              </div>
               
               <DiagnosisResult
                 isLoading={isLoading}
@@ -551,9 +586,13 @@ const Index = () => {
           
           <TabsContent value="history">
             <ScanHeader
-              title="Environmental Impact Dashboard"
-              description="Track your plants' carbon sequestration and environmental contributions"
+              title={currentLanguage.code === 'sw' ? "Dashibodi ya Matokeo kwa Jamii" : "Harambee Impact Dashboard"}
+              description={currentLanguage.code === 'sw' ? "Fuatilia michango yako binafsi na ya jamii kwa mustakabali wa kijani wa Kenya" : "Track your personal and community contributions to Kenya's green future"}
             />
+
+            <div className="mb-8">
+              <CommunityImpact />
+            </div>
 
             {/* Quick Stats Summary */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Camera, History, MessageSquare, BookOpen, Users, Video, Info,
   Plane, Bug, HandHeart, ChevronDown, Settings, MoreHorizontal, Calendar, Wallet,
@@ -132,10 +133,95 @@ export const allNavItems = [...toolsNavItems, ...primaryNavItems, ...learningNav
 
 const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile = false, closeMenu }) => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [isLearningOpen, setIsLearningOpen] = useState(false);
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [isToolsOpen, setIsToolsOpen] = useState(false);
   const [isMarketplaceOpen, setIsMarketplaceOpen] = useState(false);
+
+  // Localized items
+  const toolsItems = [
+    {
+      name: t('navigation.scan'),
+      path: "/scan",
+      icon: <Camera className="h-4 w-4 mr-1" />,
+      authRequired: true
+    },
+    {
+      name: t('navigation.history'),
+      path: "/history",
+      icon: <History className="h-4 w-4 mr-1" />,
+      authRequired: true
+    }
+  ];
+
+  const primaryItems = [
+    {
+      name: "Expert Chat",
+      path: "/specialist-chat",
+      icon: <MessageSquare className="h-4 w-4 mr-1" />,
+      authRequired: true
+    }
+  ];
+
+  const learningItems = [
+    { 
+      name: "Plant Library", 
+      path: "/plant-library", 
+      icon: <BookOpen className="h-4 w-4 mr-1" />,
+      authRequired: false
+    },
+    { 
+      name: "Video Library", 
+      path: "/video-library", 
+      icon: <Video className="h-4 w-4 mr-1" />,
+      authRequired: false
+    },
+    { 
+      name: "Community Forum", 
+      path: "/community-forum", 
+      icon: <Users className="h-4 w-4 mr-1" />,
+      authRequired: false
+    }
+  ];
+
+  const advancedItems = [
+    { 
+      name: t('navigation.droneAnalysis'), 
+      path: "/drone-analysis", 
+      icon: <Plane className="h-4 w-4 mr-1" />,
+      authRequired: false
+    },
+    { 
+      name: t('navigation.partnerships'), 
+      path: "/partnerships", 
+      icon: <HandHeart className="h-4 w-4 mr-1" />,
+      authRequired: false
+    },
+    { 
+      name: t('navigation.about'), 
+      path: "/about", 
+      icon: <Info className="h-4 w-4 mr-1" />,
+      authRequired: false
+    }
+  ];
+
+  const marketplaceItems = [
+    {
+      name: "NFT Gallery",
+      path: "/nft-gallery",
+      icon: <Wallet className="h-4 w-4 mr-1" />,
+      authRequired: false
+    },
+    {
+      name: "Plant Store",
+      path: "/plant-store",
+      icon: <ShoppingCart className="h-4 w-4 mr-1" />,
+      authRequired: false
+    }
+  ];
+
+  const allItems = [...toolsItems, ...primaryItems, ...learningItems, ...advancedItems, ...marketplaceItems];
   
   const handleNavigation = (path: string, tabName: string) => {
     navigate(path);
@@ -154,7 +240,7 @@ const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile =
   if (isMobile) {
     return (
       <div className="flex flex-col space-y-1">
-        {allNavItems.map((item) => (
+        {allItems.map((item) => (
           <Button
             key={item.name}
             variant="ghost"
@@ -191,18 +277,18 @@ const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile =
             variant="ghost"
             size="sm"
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
-              toolsNavItems.some(item => isActive(item.name, item.path))
+              toolsItems.some(item => isActive(item.name, item.path))
                 ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md"
                 : "text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
             }`}
           >
             <Camera className="h-4 w-4" />
-            <span>Tools</span>
+            <span>{t('navigation.tools') || 'Tools'}</span>
             <ChevronDown className="h-3 w-3" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-52 glass-morphism shadow-xl border border-emerald-200/50">
-          {toolsNavItems.map((item) => (
+          {toolsItems.map((item) => (
             <DropdownMenuItem
               key={item.name}
               onClick={() => handleNavigation(item.path, item.name)}
@@ -218,7 +304,7 @@ const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile =
       </DropdownMenu>
 
       {/* Primary Navigation */}
-      {primaryNavItems.map((item) => (
+      {primaryItems.map((item) => (
         <Button
           key={item.name}
           variant="ghost"
@@ -242,18 +328,18 @@ const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile =
             variant="ghost"
             size="sm"
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
-              learningNavItems.some(item => isActive(item.name, item.path))
+              learningItems.some(item => isActive(item.name, item.path))
                 ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md"
                 : "text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
             }`}
           >
             <BookOpen className="h-4 w-4" />
-            <span>Learn</span>
+            <span>{t('navigation.learn') || 'Learn'}</span>
             <ChevronDown className="h-3 w-3" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-52 glass-morphism shadow-xl border border-emerald-200/50">
-          {learningNavItems.map((item) => (
+          {learningItems.map((item) => (
             <DropdownMenuItem
               key={item.name}
               onClick={() => handleNavigation(item.path, item.name)}
@@ -275,18 +361,18 @@ const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile =
             variant="ghost"
             size="sm"
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
-              marketplaceNavItems.some(item => isActive(item.name, item.path))
+              marketplaceItems.some(item => isActive(item.name, item.path))
                 ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-md"
                 : "text-purple-700 hover:bg-purple-50 hover:text-purple-800"
             }`}
           >
             <Wallet className="h-4 w-4" />
-            <span>Marketplace</span>
+            <span>{t('navigation.marketplace') || 'Marketplace'}</span>
             <ChevronDown className="h-3 w-3" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-52 glass-morphism shadow-xl border border-purple-200/50">
-          {marketplaceNavItems.map((item) => (
+          {marketplaceItems.map((item) => (
             <DropdownMenuItem
               key={item.name}
               onClick={() => handleNavigation(item.path, item.name)}
@@ -308,18 +394,18 @@ const NavItems: React.FC<NavItemsProps> = ({ activeTab, setActiveTab, isMobile =
             variant="ghost"
             size="sm"
             className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 ${
-              advancedNavItems.some(item => isActive(item.name, item.path))
+              advancedItems.some(item => isActive(item.name, item.path))
                 ? "bg-gradient-to-r from-sapphire-500 to-sapphire-600 text-white shadow-md"
                 : "text-sapphire-700 hover:bg-sapphire-50 hover:text-sapphire-800"
             }`}
           >
             <MoreHorizontal className="h-4 w-4" />
-            <span>More</span>
+            <span>{t('navigation.more') || 'More'}</span>
             <ChevronDown className="h-3 w-3" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-52 glass-morphism shadow-xl border border-sapphire-200/50">
-          {advancedNavItems.map((item) => (
+          {advancedItems.map((item) => (
             <DropdownMenuItem
               key={item.name}
               onClick={() => handleNavigation(item.path, item.name)}

@@ -38,11 +38,12 @@
 ```
 
 ### System Components
-1. **Frontend Layer**: React-based web application with responsive design
-2. **Backend Layer**: Supabase for database, authentication, and functions
-3. **AI/ML Layer**: Custom services for plant analysis and environmental calculations
-4. **Blockchain Layer**: Polygon network for NFT minting and marketplace
-5. **External Services**: Integration with third-party APIs and data sources
+1. **Frontend Layer**: React-based web application with reactive localization (Swahili/English)
+2. **Backend Layer**: Supabase for database, authentication, and regional edge functions
+3. **AI/ML Layer**: Custom services for plant analysis, predictive pest alerting, and voice synthesis
+4. **Regional Context Engine**: Global state management for localized community data science
+5. **Financial Inclusion Layer**: M-Pesa API integration for secure local transactions
+6. **Blockchain Layer**: Polygon network for impact-verified NFT minting and marketplace
 
 ---
 

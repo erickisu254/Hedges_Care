@@ -8,59 +8,61 @@ import {
   History, 
   Users, 
   Plane,
-  Bug,
   ArrowRight,
   Zap
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const QuickActions = () => {
   const navigate = useNavigate();
+  const { t, currentLanguage } = useLanguage();
+  const isSwahili = currentLanguage.code === 'sw';
 
   const quickActions = [
     {
-      title: "Quick Scan",
-      description: "Upload and analyze plant images instantly",
+      title: isSwahili ? "Scan ya Haraka" : "Quick Scan",
+      description: isSwahili ? "Pakia na uchambue picha za mimea papo hapo" : "Upload and analyze plant images instantly",
       icon: <Camera className="h-5 w-5" />,
       color: "bg-green-500",
       action: () => navigate("/scan"),
       shortcut: "S"
     },
     {
-      title: "Plants Library",
-      description: "Browse comprehensive disease database",
+      title: isSwahili ? "Maktaba ya Mimea" : "Plants Library",
+      description: isSwahili ? "Vinjari database ya kina ya magonjwa" : "Browse comprehensive disease database",
       icon: <BookOpen className="h-5 w-5" />,
       color: "bg-blue-500",
       action: () => navigate("/plant-library"),
       shortcut: "D"
     },
     {
-      title: "Expert Chat",
-      description: "Get help from agricultural specialists",
+      title: isSwahili ? "Ongea na Mtaalamu" : "Expert Chat",
+      description: isSwahili ? "Pata msaada kutoka kwa wataalamu wa kilimo" : "Get help from agricultural specialists",
       icon: <MessageSquare className="h-5 w-5" />,
       color: "bg-purple-500",
       action: () => navigate("/specialist-chat"),
       shortcut: "E"
     },
     {
-      title: "Scan History",
-      description: "Review previous diagnoses",
-      icon: <History className="h-5 w-5" />,
-      color: "bg-orange-500",
-      action: () => navigate("/history"),
+      title: isSwahili ? "Miradi ya Harambee" : "Harambee Projects",
+      description: isSwahili ? "Jiunge na juhudi za urejeshaji wa jamii" : "Join local community restoration efforts",
+      icon: <Users className="h-5 w-5" />,
+      color: "bg-emerald-500",
+      action: () => navigate("/community-forum"),
       shortcut: "H"
     },
     {
-      title: "Community",
-      description: "Connect with other farmers",
-      icon: <Users className="h-5 w-5" />,
-      color: "bg-cyan-500",
-      action: () => navigate("/community-forum"),
-      shortcut: "C"
+      title: isSwahili ? "Shamba Langu" : "My Shamba",
+      description: isSwahili ? "Kagua utambuzi wa afya ya mimea yako" : "Review your plant health diagnoses",
+      icon: <History className="h-5 w-5" />,
+      color: "bg-orange-500",
+      action: () => navigate("/history"),
+      shortcut: "M"
     },
     {
-      title: "Drone Analysis",
-      description: "Analyze field imagery with AI",
+      title: isSwahili ? "Uchambuzi wa Drone" : "Drone Analysis",
+      description: isSwahili ? "Chambua picha za shamba kwa AI" : "Analyze field imagery with AI",
       icon: <Plane className="h-5 w-5" />,
       color: "bg-indigo-500",
       action: () => navigate("/drone-analysis"),
@@ -73,10 +75,10 @@ const QuickActions = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Zap className="h-5 w-5 text-yellow-500" />
-          Quick Actions
+          {t('dashboard.quickActions')}
         </CardTitle>
         <CardDescription>
-          Access frequently used features with keyboard shortcuts
+          {t('dashboard.quickActionsDesc')}
         </CardDescription>
       </CardHeader>
       <CardContent>

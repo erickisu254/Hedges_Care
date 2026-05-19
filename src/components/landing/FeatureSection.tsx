@@ -1,49 +1,52 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Leaf, Shield, BarChart, Camera, Zap, Globe } from "lucide-react";
+import { Leaf, Shield, BarChart, Camera, Zap, Globe, Users } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const FeatureSection = () => {
+  const { t } = useLanguage();
+  
   const features = [
     {
       icon: <Camera className="h-8 w-8" />,
-      title: "🏡 Landscape Design Analysis",
-      description: "Our advanced AI analyzes your entire landscape design, providing insights on plant placement, health, and aesthetic improvements for optimal outdoor living spaces.",
+      title: "🩺 AI Shamba Diagnosis",
+      description: "Our advanced AI uses data science to identify plant diseases instantly, securing food production for local farmers and urban gardeners.",
       color: "text-emerald-600",
       bgColor: "bg-emerald-100"
     },
     {
-      icon: <Leaf className="h-8 w-8" />,
-      title: "🌿 Plant Health Monitoring",
-      description: "Comprehensive monitoring of plant health across your landscape, detecting early signs of disease, nutrient deficiencies, and environmental stressors before they become major issues.",
+      icon: <Globe className="h-8 w-8" />,
+      title: "🌍 15 Billion Trees Impact",
+      description: "Track your personal contribution to Kenya's national reforestation goals. Every tree you nurture is a step toward climate resilience.",
       color: "text-green-600",
       bgColor: "bg-green-100"
     },
     {
-      icon: <Shield className="h-8 w-8" />,
-      title: "🛡️ Landscape Protection Plans",
-      description: "Customized protection strategies for your entire landscape, including pest management, disease prevention, and seasonal care tailored to your specific climate and plant varieties.",
-      color: "text-blue-600",
-      bgColor: "bg-blue-100"
-    },
-    {
       icon: <Zap className="h-8 w-8" />,
-      title: "⚡ Smart Irrigation Management",
-      description: "Optimize water usage across your landscape with AI-powered irrigation recommendations, reducing waste while ensuring your plants receive the perfect amount of hydration.",
+      title: "💸 M-Pesa Micro-Payments",
+      description: "Seamless financial inclusion. Access expert horticultural services and marketplace items using M-Pesa, built for the local economy.",
       color: "text-amber-600",
       bgColor: "bg-amber-100"
     },
     {
+      icon: <Shield className="h-8 w-8" />,
+      title: "🛡️ Community Disease Alerts",
+      description: "Data-driven early warning systems. Receive real-time notifications if crop diseases are detected in your local neighborhood.",
+      color: "text-blue-600",
+      bgColor: "bg-blue-100"
+    },
+    {
       icon: <BarChart className="h-8 w-8" />,
-      title: "📈 Landscape Performance Analytics",
-      description: "Track the health, growth, and beauty of your landscape over time with detailed analytics, seasonal recommendations, and performance improvement insights.",
+      title: "📈 Social Good Analytics",
+      description: "Visualize how the community's collective efforts are absorbing CO2, improving soil health, and boosting local biodiversity.",
       color: "text-purple-600",
       bgColor: "bg-purple-100"
     },
     {
-      icon: <Globe className="h-8 w-8" />,
-      title: "🌍 Expert Landscaping Knowledge",
-      description: "Access our extensive database of landscaping expertise, including plant selection, design principles, maintenance schedules, and sustainable practices from industry professionals.",
+      icon: <Users className="h-8 w-8" />,
+      title: "👷 Youth Employment Portal",
+      description: "Connecting skilled youth with green job opportunities in landscaping and plant care, driving local economic growth.",
       color: "text-indigo-600",
       bgColor: "bg-indigo-100"
     }
@@ -55,14 +58,14 @@ const FeatureSection = () => {
         {/* Enhanced header */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-emerald-100 to-green-100 border border-emerald-200 text-emerald-800 font-medium text-sm mb-6 shadow-md">
-            <span className="text-xl">🌳</span>
-            <span>PROFESSIONAL LANDSCAPING FEATURES</span>
+            <span className="text-xl">🤝</span>
+            <span>{t('features.tag')}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Transform Your <span className="text-emerald-600">Outdoor Spaces</span> 🏡
+            {t('features.titlePart1')}<span className="text-emerald-600">{t('features.titlePart2')}</span>{t('features.titlePart3')} 🏡
           </h2>
           <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Experience professional-grade landscape management with our comprehensive AI platform. From design analysis to maintenance optimization, we help you create and maintain beautiful, thriving outdoor environments.
+            {t('features.description')}
           </p>
         </div>
 
@@ -94,30 +97,30 @@ const FeatureSection = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white font-medium text-sm mb-6">
                 <span className="text-lg">🌿</span>
-                <span>Professional Landscaping Technology</span>
+                <span>AI for Environmental Stewardship</span>
               </div>
               <h3 className="text-3xl md:text-4xl font-bold mb-6">
-                Complete <span className="text-emerald-200">Landscape Solutions</span>
+                Scaling <span className="text-emerald-200">Community Impact</span>
               </h3>
               <p className="text-lg text-emerald-100 mb-8 leading-relaxed">
-                Our platform combines cutting-edge AI technology with professional landscaping expertise to deliver comprehensive solutions for residential and commercial outdoor spaces.
+                Our technology combines computer vision with environmental science to empower local communities. From urban gardens to rural farms, we provide the tools needed to build climate resilience and food security.
               </p>
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <div className="text-2xl font-bold mb-1">500+</div>
-                  <div className="text-emerald-200 text-sm">Plant Species</div>
+                  <div className="text-2xl font-bold mb-1">1,000+</div>
+                  <div className="text-emerald-200 text-sm">Species Analyzed</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold mb-1">98%</div>
-                  <div className="text-emerald-200 text-sm">Client Satisfaction</div>
+                  <div className="text-2xl font-bold mb-1">1.2k Tons</div>
+                  <div className="text-emerald-200 text-sm">CO2 Sequestered</div>
                 </div>
                 <div>
                   <div className="text-2xl font-bold mb-1">24/7</div>
-                  <div className="text-emerald-200 text-sm">Expert Support</div>
+                  <div className="text-emerald-200 text-sm">Community Support</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold mb-1">10K+</div>
-                  <div className="text-emerald-200 text-sm">Successful Projects</div>
+                  <div className="text-2xl font-bold mb-1">15B</div>
+                  <div className="text-emerald-200 text-sm">Tree Goal Support</div>
                 </div>
               </div>
             </div>
