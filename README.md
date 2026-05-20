@@ -496,7 +496,16 @@ For detailed instructions, see the [Setup Guide](./Docs/developer/SETUP_GUIDE.md
 
 ---
 
-## 📚 Documentation
+## 🏆 Hackathon Submission (May 2026)
+
+**Hedges Care** was developed for the **Moringa School Hackathon**, themed: **"Data for Social Good: Solving Local Community Challenges"**. 
+
+Our submission focuses on turning data science into a survival kit for the Kenyan landscape, aligning with the **15 Billion Trees Initiative** and promoting **Financial Inclusion** through M-Pesa.
+
+- 📄 **Full Proposal:** [HACKATHON_PROPOSAL_2026.md](HACKATHON_PROPOSAL_2026.md)
+- 🎤 **Presentation Guide:** [Docs/hackathon/PRESENTATION_GUIDE.md](Docs/hackathon/PRESENTATION_GUIDE.md)
+
+---
 
 - [**Hackathon Submission**](./Docs/hackathon/SUBMISSION_PROPOSAL.md): Our "Code with Purpose, Build for Impact" strategy.
 - [**Presentation Guide**](./Docs/hackathon/PRESENTATION_GUIDE.md): Pitch and demo strategy for the team.
